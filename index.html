@@ -21,7 +21,7 @@ body {
   overflow-x: hidden;
 }
 
-/* ===== LOADING INTRO ===== */
+/* ===== LOADER ===== */
 #loader {
   position: fixed;
   inset: 0;
@@ -35,8 +35,8 @@ body {
 }
 
 #loader h1 {
-  font-size: 2.8rem;
-  letter-spacing: 4px;
+  font-size: 3rem;
+  letter-spacing: 6px;
   animation: flicker 2s ease;
 }
 
@@ -48,51 +48,44 @@ body {
 }
 
 @keyframes fadeOut {
-  to {
-    opacity: 0;
-    visibility: hidden;
-  }
+  to { opacity: 0; visibility: hidden; }
 }
 
 /* ===== HEADER ===== */
 header {
   padding: 40px 60px;
+  position: relative;
 }
 
 header h1 {
   font-size: 2rem;
-  font-weight: 700;
   letter-spacing: 2px;
 }
 
 /* ===== ROW ===== */
 .row {
   padding: 20px 60px 60px;
+  position: relative;
 }
 
-.row-title {
-  font-size: 1.4rem;
-  margin-bottom: 20px;
-}
-
-/* ===== GAME CARD ===== */
+/* ===== CARD ===== */
 .games {
   display: flex;
-  gap: 40px;
+  gap: 50px;
 }
 
 .card-wrap {
-  perspective: 1000px;
+  perspective: 1200px;
 }
 
 .game-card {
-  width: 280px;
-  height: 160px;
-  border-radius: 8px;
+  width: 300px;
+  height: 170px;
+  border-radius: 10px;
   overflow: hidden;
   position: relative;
   transform-style: preserve-3d;
-  transition: transform 0.15s ease;
+  transition: transform 0.1s ease;
   cursor: pointer;
 }
 
@@ -108,12 +101,11 @@ header h1 {
   position: absolute;
   inset: 0;
   background: radial-gradient(
-    circle at var(--x) var(--y),
-    rgba(255,255,255,0.35),
-    transparent 40%
+    circle at var(--gx) var(--gy),
+    rgba(255,255,255,0.45),
+    transparent 45%
   );
   opacity: 0;
-  transition: opacity 0.2s ease;
   pointer-events: none;
 }
 
@@ -121,20 +113,19 @@ header h1 {
 .overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to top, rgba(0,0,0,0.85), transparent);
+  background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
   display: flex;
   align-items: flex-end;
-  padding: 15px;
+  padding: 18px;
   opacity: 0;
-  transition: opacity 0.3s ease;
 }
 
 .game-title {
-  font-size: 1.2rem;
-  letter-spacing: 2px;
+  font-size: 1.3rem;
+  letter-spacing: 3px;
 }
 
-/* Hover Effects */
+/* Hover */
 .game-card:hover img {
   filter: grayscale(0%);
 }
@@ -144,43 +135,36 @@ header h1 {
   opacity: 1;
 }
 
-/* ===== FOOTER ===== */
+/* Footer */
 footer {
   padding: 30px;
   text-align: center;
   opacity: 0.4;
-  font-size: 0.85rem;
 }
 
-/* Mobile */
-@media (max-width: 768px) {
-  header, .row {
-    padding: 30px;
-  }
-  .game-card {
-    width: 220px;
-    height: 130px;
-  }
+footer a {
+  color: white;
+  text-decoration: none;
+  margin: 0 10px;
+  opacity: 0.6;
+}
+
+footer a:hover {
+  opacity: 1;
 }
 </style>
 </head>
 
 <body>
 
-<!-- LOADER -->
-<div id="loader">
-  <h1>FROSTSINC</h1>
-</div>
+<div id="loader"><h1>FROSTSINC</h1></div>
 
-<header>
+<header class="parallax">
   <h1>FrostsInc Games</h1>
 </header>
 
-<section class="row">
-  <div class="row-title">Games</div>
-
+<section class="row parallax">
   <div class="games">
-
     <div class="card-wrap">
       <a href="games/2048/index.html">
         <div class="game-card">
@@ -192,18 +176,28 @@ footer {
         </div>
       </a>
     </div>
-
   </div>
 </section>
 
 <footer>
-  © 2026 FrostsInc Games
+  © 2026 FrostsInc Games |
+  <a href="tos.html">ToS</a> |
+  <a href="proxy.html">Proxy</a>
 </footer>
 
 <script>
-const cards = document.querySelectorAll('.game-card');
+/* ===== PAGE PARALLAX ===== */
+document.addEventListener('mousemove', e => {
+  const x = (e.clientX / window.innerWidth - 0.5) * 20;
+  const y = (e.clientY / window.innerHeight - 0.5) * 20;
 
-cards.forEach(card => {
+  document.querySelectorAll('.parallax').forEach(el => {
+    el.style.transform = `translate(${x}px, ${y}px)`;
+  });
+});
+
+/* ===== CARD FOLLOW + GLARE ===== */
+document.querySelectorAll('.game-card').forEach(card => {
   const glare = card.querySelector('.glare');
 
   card.addEventListener('mousemove', e => {
@@ -211,17 +205,23 @@ cards.forEach(card => {
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
 
-    const rotateX = ((y / rect.height) - 0.5) * -12;
-    const rotateY = ((x / rect.width) - 0.5) * 12;
+    const moveX = (x / rect.width - 0.5) * 20;
+    const moveY = (y / rect.height - 0.5) * 20;
+    const rotX = (y / rect.height - 0.5) * -12;
+    const rotY = (x / rect.width - 0.5) * 12;
 
-    card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.15)`;
+    card.style.transform =
+      `translate(${moveX}px, ${moveY}px)
+       rotateX(${rotX}deg)
+       rotateY(${rotY}deg)
+       scale(1.15)`;
 
-    glare.style.setProperty('--x', `${x}px`);
-    glare.style.setProperty('--y', `${y}px`);
+    glare.style.setProperty('--gx', `${x}px`);
+    glare.style.setProperty('--gy', `${y}px`);
   });
 
   card.addEventListener('mouseleave', () => {
-    card.style.transform = 'rotateX(0) rotateY(0) scale(1)';
+    card.style.transform = 'translate(0,0) rotateX(0) rotateY(0) scale(1)';
   });
 });
 </script>
