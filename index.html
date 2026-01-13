@@ -21,40 +21,26 @@ body {
   overflow-x: hidden;
 }
 
-/* ===== LOADER ===== */
-#loader {
+/* ===== Animated Noise ===== */
+body::before {
+  content: "";
   position: fixed;
   inset: 0;
-  background: black;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 999;
-  animation: fadeOut 1s ease forwards;
-  animation-delay: 2.2s;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+  pointer-events: none;
+  animation: noise 0.25s steps(2) infinite;
 }
 
-#loader h1 {
-  font-size: 3rem;
-  letter-spacing: 6px;
-  animation: flicker 2s ease;
+@keyframes noise {
+  0% { transform: translate(0,0); }
+  25% { transform: translate(-2px,2px); }
+  50% { transform: translate(2px,-2px); }
+  75% { transform: translate(-1px,1px); }
 }
 
-@keyframes flicker {
-  0% { opacity: 0 }
-  50% { opacity: 1 }
-  80% { opacity: 0.4 }
-  100% { opacity: 1 }
-}
-
-@keyframes fadeOut {
-  to { opacity: 0; visibility: hidden; }
-}
-
-/* ===== HEADER ===== */
+/* ===== Header ===== */
 header {
   padding: 40px 60px;
-  position: relative;
 }
 
 header h1 {
@@ -62,20 +48,19 @@ header h1 {
   letter-spacing: 2px;
 }
 
-/* ===== ROW ===== */
+/* ===== Games Row ===== */
 .row {
   padding: 20px 60px 60px;
-  position: relative;
 }
 
-/* ===== CARD ===== */
 .games {
   display: flex;
-  gap: 50px;
+  gap: 40px;
 }
 
+/* ===== Card ===== */
 .card-wrap {
-  perspective: 1200px;
+  perspective: 1000px;
 }
 
 .game-card {
@@ -85,7 +70,7 @@ header h1 {
   overflow: hidden;
   position: relative;
   transform-style: preserve-3d;
-  transition: transform 0.1s ease;
+  transition: transform 0.15s ease;
   cursor: pointer;
 }
 
@@ -94,6 +79,7 @@ header h1 {
   height: 100%;
   object-fit: cover;
   filter: grayscale(100%) contrast(1.1);
+  transition: filter 0.3s ease;
 }
 
 /* Glare */
@@ -101,12 +87,13 @@ header h1 {
   position: absolute;
   inset: 0;
   background: radial-gradient(
-    circle at var(--gx) var(--gy),
-    rgba(255,255,255,0.45),
+    circle at var(--x) var(--y),
+    rgba(255,255,255,0.4),
     transparent 45%
   );
   opacity: 0;
   pointer-events: none;
+  transition: opacity 0.2s ease;
 }
 
 /* Overlay */
@@ -118,6 +105,7 @@ header h1 {
   align-items: flex-end;
   padding: 18px;
   opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
 .game-title {
@@ -141,14 +129,12 @@ footer {
   text-align: center;
   opacity: 0.4;
 }
-
 footer a {
   color: white;
   text-decoration: none;
-  margin: 0 10px;
+  margin-left: 10px;
   opacity: 0.6;
 }
-
 footer a:hover {
   opacity: 1;
 }
@@ -157,13 +143,11 @@ footer a:hover {
 
 <body>
 
-<div id="loader"><h1>FROSTSINC</h1></div>
-
-<header class="parallax">
+<header>
   <h1>FrostsInc Games</h1>
 </header>
 
-<section class="row parallax">
+<section class="row">
   <div class="games">
     <div class="card-wrap">
       <a href="games/2048/index.html">
@@ -181,47 +165,29 @@ footer a:hover {
 
 <footer>
   © 2026 FrostsInc Games |
-  <a href="tos.html">ToS</a> |
   <a href="proxy.html">Proxy</a>
 </footer>
 
 <script>
-/* ===== PAGE PARALLAX ===== */
-document.addEventListener('mousemove', e => {
-  const x = (e.clientX / window.innerWidth - 0.5) * 20;
-  const y = (e.clientY / window.innerHeight - 0.5) * 20;
-
-  document.querySelectorAll('.parallax').forEach(el => {
-    el.style.transform = `translate(${x}px, ${y}px)`;
-  });
-});
-
-/* ===== CARD FOLLOW + GLARE ===== */
 document.querySelectorAll('.game-card').forEach(card => {
   const glare = card.querySelector('.glare');
 
   card.addEventListener('mousemove', e => {
-    const rect = card.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
+    const r = card.getBoundingClientRect();
+    const x = e.clientX - r.left;
+    const y = e.clientY - r.top;
 
-    const moveX = (x / rect.width - 0.5) * 20;
-    const moveY = (y / rect.height - 0.5) * 20;
-    const rotX = (y / rect.height - 0.5) * -12;
-    const rotY = (x / rect.width - 0.5) * 12;
+    const rx = ((y / r.height) - 0.5) * -14;
+    const ry = ((x / r.width) - 0.5) * 14;
 
-    card.style.transform =
-      `translate(${moveX}px, ${moveY}px)
-       rotateX(${rotX}deg)
-       rotateY(${rotY}deg)
-       scale(1.15)`;
+    card.style.transform = `rotateX(${rx}deg) rotateY(${ry}deg) scale(1.12)`;
 
-    glare.style.setProperty('--gx', `${x}px`);
-    glare.style.setProperty('--gy', `${y}px`);
+    glare.style.setProperty('--x', `${x}px`);
+    glare.style.setProperty('--y', `${y}px`);
   });
 
   card.addEventListener('mouseleave', () => {
-    card.style.transform = 'translate(0,0) rotateX(0) rotateY(0) scale(1)';
+    card.style.transform = 'rotateX(0) rotateY(0) scale(1)';
   });
 });
 </script>
