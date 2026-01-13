@@ -1,137 +1,176 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>FrostsInc Games</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 
 <style>
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
-  body {
-    background: #000;
-    color: #fff;
-    font-family: 'Inter', sans-serif;
-  }
+body {
+  background: black;
+  color: white;
+  font-family: 'Inter', sans-serif;
+  overflow-x: hidden;
+}
 
-  header {
-    padding: 40px 60px;
-    display: flex;
-    align-items: center;
-  }
+/* ===== LOADING INTRO ===== */
+#loader {
+  position: fixed;
+  inset: 0;
+  background: black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  animation: fadeOut 1s ease forwards;
+  animation-delay: 2.2s;
+}
 
-  header h1 {
-    font-size: 2rem;
-    font-weight: 700;
-    letter-spacing: 1px;
-  }
+#loader h1 {
+  font-size: 2.8rem;
+  letter-spacing: 4px;
+  animation: flicker 2s ease;
+}
 
-  .row {
-    padding: 20px 60px 60px;
-  }
+@keyframes flicker {
+  0% { opacity: 0 }
+  50% { opacity: 1 }
+  80% { opacity: 0.4 }
+  100% { opacity: 1 }
+}
 
-  .row-title {
-    font-size: 1.4rem;
-    font-weight: 600;
-    margin-bottom: 15px;
-  }
-
-  .games {
-    display: flex;
-    gap: 20px;
-    overflow-x: auto;
-    padding-bottom: 20px;
-  }
-
-  .games::-webkit-scrollbar {
-    display: none;
-  }
-
-  .game-card {
-    min-width: 260px;
-    height: 150px;
-    border-radius: 6px;
-    overflow: hidden;
-    position: relative;
-    cursor: pointer;
-    transition: transform 0.35s ease;
-    background: #111;
-    text-decoration: none;
-    color: white;
-  }
-
-  .game-card img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    filter: grayscale(100%) contrast(1.1);
-    transition: transform 0.4s ease, filter 0.4s ease;
-  }
-
-  .game-card:hover {
-    transform: scale(1.25);
-    z-index: 10;
-  }
-
-  .game-card:hover img {
-    transform: scale(1.1);
-    filter: grayscale(0%);
-  }
-
-  .overlay {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(
-      to top,
-      rgba(0,0,0,0.85),
-      rgba(0,0,0,0.1)
-    );
+@keyframes fadeOut {
+  to {
     opacity: 0;
-    transition: opacity 0.3s ease;
-    display: flex;
-    align-items: flex-end;
-    padding: 15px;
+    visibility: hidden;
   }
+}
 
-  .game-card:hover .overlay {
-    opacity: 1;
-  }
+/* ===== HEADER ===== */
+header {
+  padding: 40px 60px;
+}
 
-  .game-title {
-    font-size: 1.2rem;
-    font-weight: 600;
-    letter-spacing: 1px;
-  }
+header h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
 
-  footer {
+/* ===== ROW ===== */
+.row {
+  padding: 20px 60px 60px;
+}
+
+.row-title {
+  font-size: 1.4rem;
+  margin-bottom: 20px;
+}
+
+/* ===== GAME CARD ===== */
+.games {
+  display: flex;
+  gap: 40px;
+}
+
+.card-wrap {
+  perspective: 1000px;
+}
+
+.game-card {
+  width: 280px;
+  height: 160px;
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.15s ease;
+  cursor: pointer;
+}
+
+.game-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(100%) contrast(1.1);
+}
+
+/* Glare */
+.glare {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at var(--x) var(--y),
+    rgba(255,255,255,0.35),
+    transparent 40%
+  );
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+}
+
+/* Overlay */
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.85), transparent);
+  display: flex;
+  align-items: flex-end;
+  padding: 15px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.game-title {
+  font-size: 1.2rem;
+  letter-spacing: 2px;
+}
+
+/* Hover Effects */
+.game-card:hover img {
+  filter: grayscale(0%);
+}
+
+.game-card:hover .overlay,
+.game-card:hover .glare {
+  opacity: 1;
+}
+
+/* ===== FOOTER ===== */
+footer {
+  padding: 30px;
+  text-align: center;
+  opacity: 0.4;
+  font-size: 0.85rem;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  header, .row {
     padding: 30px;
-    text-align: center;
-    opacity: 0.4;
-    font-size: 0.85rem;
   }
-
-  @media (max-width: 768px) {
-    header {
-      padding: 30px;
-    }
-    .row {
-      padding: 20px 30px 40px;
-    }
-    .game-card {
-      min-width: 220px;
-      height: 130px;
-    }
+  .game-card {
+    width: 220px;
+    height: 130px;
   }
+}
 </style>
 </head>
 
 <body>
+
+<!-- LOADER -->
+<div id="loader">
+  <h1>FROSTSINC</h1>
+</div>
 
 <header>
   <h1>FrostsInc Games</h1>
@@ -142,13 +181,17 @@
 
   <div class="games">
 
-    <!-- 2048 -->
-    <a href="games/2048/index.html" class="game-card">
-      <img src="assets/images/IMG_4322.jpeg" alt="2048">
-      <div class="overlay">
-        <div class="game-title">2048</div>
-      </div>
-    </a>
+    <div class="card-wrap">
+      <a href="games/2048/index.html">
+        <div class="game-card">
+          <img src="assets/images/IMG_4322.jpeg" alt="2048">
+          <div class="glare"></div>
+          <div class="overlay">
+            <div class="game-title">2048</div>
+          </div>
+        </div>
+      </a>
+    </div>
 
   </div>
 </section>
@@ -156,6 +199,32 @@
 <footer>
   © 2026 FrostsInc Games
 </footer>
+
+<script>
+const cards = document.querySelectorAll('.game-card');
+
+cards.forEach(card => {
+  const glare = card.querySelector('.glare');
+
+  card.addEventListener('mousemove', e => {
+    const rect = card.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    const rotateX = ((y / rect.height) - 0.5) * -12;
+    const rotateY = ((x / rect.width) - 0.5) * 12;
+
+    card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.15)`;
+
+    glare.style.setProperty('--x', `${x}px`);
+    glare.style.setProperty('--y', `${y}px`);
+  });
+
+  card.addEventListener('mouseleave', () => {
+    card.style.transform = 'rotateX(0) rotateY(0) scale(1)';
+  });
+});
+</script>
 
 </body>
 </html>
