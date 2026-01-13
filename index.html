@@ -1,146 +1,161 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>FrostsInc Games</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>FrostsInc Games</title>
 
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 
-  <style>
-    :root {
-      --bg: #0b0f1a;
-      --card: #12182a;
-      --accent: #7aa2ff;
-      --text: #eaeaff;
-      --glow: rgba(122,162,255,0.6);
-    }
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+  body {
+    background: #000;
+    color: #fff;
+    font-family: 'Inter', sans-serif;
+  }
 
-    body {
-      font-family: 'Orbitron', sans-serif;
-      background: radial-gradient(circle at top, #11162a, var(--bg));
-      color: var(--text);
-      min-height: 100vh;
-    }
+  header {
+    padding: 40px 60px;
+    display: flex;
+    align-items: center;
+  }
 
+  header h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+  }
+
+  .row {
+    padding: 20px 60px 60px;
+  }
+
+  .row-title {
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin-bottom: 15px;
+  }
+
+  .games {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    padding-bottom: 20px;
+  }
+
+  .games::-webkit-scrollbar {
+    display: none;
+  }
+
+  .game-card {
+    min-width: 260px;
+    height: 150px;
+    border-radius: 6px;
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+    transition: transform 0.35s ease;
+    background: #111;
+    text-decoration: none;
+    color: white;
+  }
+
+  .game-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(100%) contrast(1.1);
+    transition: transform 0.4s ease, filter 0.4s ease;
+  }
+
+  .game-card:hover {
+    transform: scale(1.25);
+    z-index: 10;
+  }
+
+  .game-card:hover img {
+    transform: scale(1.1);
+    filter: grayscale(0%);
+  }
+
+  .overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to top,
+      rgba(0,0,0,0.85),
+      rgba(0,0,0,0.1)
+    );
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    display: flex;
+    align-items: flex-end;
+    padding: 15px;
+  }
+
+  .game-card:hover .overlay {
+    opacity: 1;
+  }
+
+  .game-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+  }
+
+  footer {
+    padding: 30px;
+    text-align: center;
+    opacity: 0.4;
+    font-size: 0.85rem;
+  }
+
+  @media (max-width: 768px) {
     header {
-      padding: 40px 20px;
-      text-align: center;
-    }
-
-    header h1 {
-      font-size: 3rem;
-      letter-spacing: 2px;
-      text-shadow: 0 0 15px var(--glow);
-    }
-
-    header p {
-      opacity: 0.8;
-      margin-top: 10px;
-    }
-
-    .games {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 30px;
-      padding: 40px;
-      max-width: 1200px;
-      margin: auto;
-    }
-
-    .game-card {
-      position: relative;
-      background: var(--card);
-      border-radius: 16px;
-      overflow: hidden;
-      text-decoration: none;
-      color: inherit;
-      transition: transform 0.35s ease, box-shadow 0.35s ease;
-    }
-
-    .game-card::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(
-        120deg,
-        transparent 40%,
-        rgba(255,255,255,0.15),
-        transparent 60%
-      );
-      transform: translateX(-100%);
-      transition: transform 0.6s ease;
-    }
-
-    .game-card:hover::before {
-      transform: translateX(100%);
-    }
-
-    .game-card:hover {
-      transform: translateY(-10px) scale(1.03);
-      box-shadow: 0 25px 60px rgba(0,0,0,0.6),
-                  0 0 25px var(--glow);
-    }
-
-    .game-image {
-      width: 100%;
-      height: 180px;
-      object-fit: cover;
-    }
-
-    .game-info {
-      padding: 20px;
-      text-align: center;
-    }
-
-    .game-title {
-      font-size: 1.5rem;
-      transition: letter-spacing 0.3s ease, color 0.3s ease;
-    }
-
-    .game-card:hover .game-title {
-      letter-spacing: 4px;
-      color: var(--accent);
-      text-shadow: 0 0 10px var(--glow);
-    }
-
-    footer {
-      text-align: center;
       padding: 30px;
-      opacity: 0.5;
-      font-size: 0.9rem;
     }
-  </style>
+    .row {
+      padding: 20px 30px 40px;
+    }
+    .game-card {
+      min-width: 220px;
+      height: 130px;
+    }
+  }
+</style>
 </head>
 
 <body>
 
-  <header>
-    <h1>FrostsInc Games</h1>
-    <p>Select a game to play</p>
-  </header>
+<header>
+  <h1>FrostsInc Games</h1>
+</header>
 
-  <section class="games">
+<section class="row">
+  <div class="row-title">Games</div>
 
-    <!-- 2048 Game -->
+  <div class="games">
+
+    <!-- 2048 -->
     <a href="games/2048/index.html" class="game-card">
-      <img src="assets/images/2048.jpg" alt="2048 Game" class="game-image">
-      <div class="game-info">
+      <img src="assets/images/2048.jpg" alt="2048">
+      <div class="overlay">
         <div class="game-title">2048</div>
       </div>
     </a>
 
-  </section>
+  </div>
+</section>
 
-  <footer>
-    © 2026 FrostsInc Games
-  </footer>
+<footer>
+  © 2026 FrostsInc Games
+</footer>
 
 </body>
 </html>
