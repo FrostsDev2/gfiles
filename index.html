@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FrostsInc Games</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #0b0f1a;
+      --card: #12182a;
+      --accent: #7aa2ff;
+      --text: #eaeaff;
+      --glow: rgba(122,162,255,0.6);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Orbitron', sans-serif;
+      background: radial-gradient(circle at top, #11162a, var(--bg));
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    header {
+      padding: 40px 20px;
+      text-align: center;
+    }
+
+    header h1 {
+      font-size: 3rem;
+      letter-spacing: 2px;
+      text-shadow: 0 0 15px var(--glow);
+    }
+
+    header p {
+      opacity: 0.8;
+      margin-top: 10px;
+    }
+
+    .games {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 30px;
+      padding: 40px;
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    .game-card {
+      position: relative;
+      background: var(--card);
+      border-radius: 16px;
+      overflow: hidden;
+      text-decoration: none;
+      color: inherit;
+      transition: transform 0.35s ease, box-shadow 0.35s ease;
+    }
+
+    .game-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        120deg,
+        transparent 40%,
+        rgba(255,255,255,0.15),
+        transparent 60%
+      );
+      transform: translateX(-100%);
+      transition: transform 0.6s ease;
+    }
+
+    .game-card:hover::before {
+      transform: translateX(100%);
+    }
+
+    .game-card:hover {
+      transform: translateY(-10px) scale(1.03);
+      box-shadow: 0 25px 60px rgba(0,0,0,0.6),
+                  0 0 25px var(--glow);
+    }
+
+    .game-image {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+    }
+
+    .game-info {
+      padding: 20px;
+      text-align: center;
+    }
+
+    .game-title {
+      font-size: 1.5rem;
+      transition: letter-spacing 0.3s ease, color 0.3s ease;
+    }
+
+    .game-card:hover .game-title {
+      letter-spacing: 4px;
+      color: var(--accent);
+      text-shadow: 0 0 10px var(--glow);
+    }
+
+    footer {
+      text-align: center;
+      padding: 30px;
+      opacity: 0.5;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <h1>FrostsInc Games</h1>
+    <p>Select a game to play</p>
+  </header>
+
+  <section class="games">
+
+    <!-- 2048 Game -->
+    <a href="games/2048/index.html" class="game-card">
+      <img src="assets/images/2048.jpg" alt="2048 Game" class="game-image">
+      <div class="game-info">
+        <div class="game-title">2048</div>
+      </div>
+    </a>
+
+  </section>
+
+  <footer>
+    © 2026 FrostsInc Games
+  </footer>
+
+</body>
+</html>
