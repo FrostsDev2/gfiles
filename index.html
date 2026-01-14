@@ -4,221 +4,83 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Frosts Inc</title>
-
+<link rel="icon" id="favicon" href="icons/logo.jpg">
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Open+Sans&display=swap" rel="stylesheet">
-
 <style>
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family: 'Open Sans', sans-serif; background:#000; color:#fff; overflow-x:hidden; transition: background 0.3s, color 0.3s; }
 
-body {
-  font-family: 'Open Sans', sans-serif;
-  background: #000;
-  color: #fff;
-  overflow-x: hidden;
-}
-
-/* ===== REACTIVE BACKGROUND ===== */
+/* ===== BACKGROUNDS ===== */
 #background {
-  position: fixed;
-  inset: 0;
+  position: fixed; inset:0;
   background:
     radial-gradient(circle at 20% 20%, #00ffff22, transparent 40%),
     radial-gradient(circle at 80% 30%, #8000ff22, transparent 45%),
     radial-gradient(circle at 50% 80%, #00ffff22, transparent 50%),
     linear-gradient(120deg, #050505, #000);
   animation: hueShift 20s infinite alternate;
-  z-index: -3;
+  z-index:-3;
   transition: transform 0.15s ease-out;
 }
+@keyframes hueShift { from{filter:hue-rotate(0deg);} to{filter:hue-rotate(25deg);} }
 
-@keyframes hueShift {
-  from { filter: hue-rotate(0deg); }
-  to { filter: hue-rotate(25deg); }
-}
-
-#mouse-glow {
-  position: fixed;
-  width: 400px;
-  height: 400px;
-  background: radial-gradient(circle, rgba(0,255,255,0.15), transparent 60%);
-  pointer-events: none;
-  transform: translate(-50%, -50%);
-  z-index: -2;
-}
-
-/* ===== PARTICLES ===== */
-#particles-canvas {
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-}
+#mouse-glow { position:fixed;width:400px;height:400px;background:radial-gradient(circle, rgba(0,255,255,0.15), transparent 60%);pointer-events:none;transform:translate(-50%,-50%);z-index:-2; }
+#particles-canvas { position:fixed; inset:0; z-index:-1; }
 
 /* ===== LOADING ===== */
-#loading-screen {
-  position: fixed;
-  inset: 0;
-  background: #000;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  z-index: 9999;
-}
-
-.loader {
-  width: 60px;
-  height: 60px;
-  border: 6px solid #333;
-  border-top: 6px solid #00ffff;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
+#loading-screen { position:fixed; inset:0; display:flex; flex-direction:column; justify-content:center; align-items:center; background:#000; z-index:9999; }
+.loader { width:60px; height:60px; border:6px solid #333; border-top:6px solid #00ffff; border-radius:50%; animation:spin 1s linear infinite; }
+@keyframes spin { to{transform:rotate(360deg);} }
 
 /* ===== HEADER ===== */
-.header-container {
-  text-align: center;
-  margin-top: 40px;
-}
-
-.title {
-  font-family: 'Orbitron', sans-serif;
-  font-size: 3em;
-  color: #00ffff;
-  text-shadow: 0 0 15px #00ffff;
-}
-
-.discord-btn {
-  margin-top: 15px;
-  padding: 10px 22px;
-  border-radius: 10px;
-  border: 1px solid #8000ff;
-  background: rgba(128,0,255,0.25);
-  backdrop-filter: blur(10px);
-  color: white;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.discord-btn:hover {
-  transform: scale(1.05);
-  background: rgba(128,0,255,0.4);
-}
+.header-container { text-align:center; margin-top:40px; }
+.title { font-family:'Orbitron', sans-serif; font-size:3em; color:#00ffff; text-shadow:0 0 15px #00ffff; }
+.discord-btn, #settings-btn { margin-top:15px; padding:10px 22px; border-radius:10px; border:1px solid #8000ff; background: rgba(128,0,255,0.25); backdrop-filter:blur(10px); color:white; cursor:pointer; transition:0.3s; }
+.discord-btn:hover, #settings-btn:hover { transform: scale(1.05); background: rgba(128,0,255,0.4); }
 
 /* ===== SEARCH & TOTAL GAMES ===== */
-.games-header {
-  text-align: center;
-  margin-top: 20px;
-}
-
-#gameSearch {
-  padding: 10px 15px;
-  border-radius: 12px;
-  border: 1px solid #00ffff;
-  background: rgba(0,0,0,0.5);
-  color: #fff;
-  outline: none;
-  width: 220px;
-  margin-bottom: 10px;
-  text-align: center;
-  transition: 0.3s;
-  box-shadow: 0 0 8px #00ffff55;
-}
-
-#gameSearch:focus {
-  box-shadow: 0 0 20px #00ffffaa;
-}
-
-#totalGames {
-  margin-top: 5px;
-  font-size: 1em;
-  color: #88c0d0;
-}
+.games-header { text-align:center; margin-top:20px; }
+#gameSearch { padding:10px 15px; border-radius:12px; border:1px solid #00ffff; background: rgba(0,0,0,0.5); color:#fff; outline:none; width:220px; margin-bottom:10px; text-align:center; transition:0.3s; box-shadow:0 0 8px #00ffff55; }
+#gameSearch:focus { box-shadow:0 0 20px #00ffffaa; }
+#totalGames { margin-top:5px; font-size:1em; color:#88c0d0; }
 
 /* ===== GAMES GRID ===== */
-.games-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 20px;
-  padding: 40px;
-  max-width: 1200px;
-  margin: auto;
-}
-
-.game-card {
-  max-width: 250px;
-  width: 100%;
-  margin: auto;
-  background: rgba(255,255,255,0.1);
-  backdrop-filter: blur(12px);
-  border-radius: 14px;
-  overflow: hidden;
-  text-decoration: none;
-  color: white;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-  transition: transform 0.2s ease;
-}
-
-.card-image {
-  width: 100%;
-  height: 200px;
-  object-fit: cover;
-  display: block;
-}
-
-.card-content {
-  padding: 15px;
-}
-
-.game-title {
-  font-size: 1.2em;
-  color: #88c0d0;
-  margin-bottom: 6px;
-}
-
-.game-description {
-  font-size: 0.9em;
-  color: #ccc;
-}
+.games-container { display:grid; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:20px; padding:40px; max-width:1200px; margin:auto; }
+.section-title { font-size:1.5em; margin-bottom:10px; color:#00ffff; text-align:center; grid-column:1/-1; }
+.game-card { max-width:250px; width:100%; margin:auto; background: rgba(255,255,255,0.1); backdrop-filter: blur(12px); border-radius:14px; overflow:hidden; text-decoration:none; color:white; box-shadow:0 10px 30px rgba(0,0,0,0.5); transition: transform 0.2s ease; }
+.card-image { width:100%; height:200px; object-fit:cover; display:block; }
+.card-content { padding:15px; }
+.game-title { font-size:1.2em; color:#88c0d0; margin-bottom:6px; }
+.game-description { font-size:0.9em; color:#ccc; }
 
 /* ===== UPDATE POPUP ===== */
-#update-popup {
-  position: fixed;
-  inset: 0;
-  display: none;
-  justify-content: center;
-  align-items: center;
-  z-index: 9998;
-}
+#update-popup { position:fixed; inset:0; display:none; justify-content:center; align-items:center; z-index:9998; }
+.popup-box { background: rgba(30,30,30,0.85); backdrop-filter: blur(12px); padding:30px; border-radius:16px; max-width:400px; text-align:center; }
+.close-btn { margin-top:20px; padding:10px 20px; border-radius:10px; border:1px solid #00ffff; background:transparent; color:#00ffff; cursor:pointer; }
 
-.popup-box {
-  background: rgba(30,30,30,0.85);
-  backdrop-filter: blur(12px);
-  padding: 30px;
-  border-radius: 16px;
-  max-width: 400px;
-  text-align: center;
-}
+/* ===== GAME MENU ===== */
+#game-menu { display:none; position:fixed; inset:0; background: rgba(0,0,0,0.95); z-index:10000; flex-direction: column; justify-content:center; align-items:center; padding:20px; }
+#game-menu iframe { width:100%; max-width:900px; height:600px; border:none; border-radius:12px; }
+#game-menu .menu-buttons { margin-top:10px; display:flex; justify-content:center; gap:15px; }
+#game-menu button { padding:10px 20px; border-radius:8px; border:none; cursor:pointer; font-weight:bold; }
+#fav-btn { background:#00ffff;color:#000; }
+#fullscreen-btn { background:#8000ff;color:#fff; }
+#newtab-btn { background:#ffaa00;color:#000; }
+#exit-btn { background:#ff0044;color:#fff; }
 
-.close-btn {
-  margin-top: 20px;
-  padding: 10px 20px;
-  border-radius: 10px;
-  border: 1px solid #00ffff;
-  background: transparent;
-  color: #00ffff;
-  cursor: pointer;
-}
+/* ===== SETTINGS MENU ===== */
+#settings-menu { display:none; position:fixed; inset:0; background: rgba(0,0,0,0.9); z-index:10001; flex-direction: column; justify-content:center; align-items:center; padding:20px; }
+.settings-box { background: rgba(30,30,30,0.85); backdrop-filter: blur(12px); padding:30px; border-radius:16px; max-width:400px; text-align:center; }
+.settings-box h2 { color:#00ffff; margin-bottom:15px; }
+.settings-box select, .settings-box input[type="text"], .settings-box input[type="checkbox"] { margin:10px 0; padding:10px 12px; border-radius:8px; border:none; outline:none; width:100%; font-size:1em; }
+#closeSettings { margin-top:15px; padding:10px 20px; border-radius:10px; border:1px solid #00ffff; background:transparent; color:#00ffff; cursor:pointer; }
+
+/* ===== DARK / LIGHT ===== */
+body.light-mode { background:#f2f2f2; color:#000; }
+body.light-mode .game-card { background: rgba(255,255,255,0.3); color:#000; }
+
 </style>
 </head>
-
 <body>
 
 <div id="background"></div>
@@ -232,7 +94,7 @@ body {
 
 <div id="update-popup">
   <div class="popup-box">
-    <h2 style="color:#00ffff;">Version 1.0.1</h2>
+    <h2>Version 1.0.1</h2>
     <p>• Initial release<br>• Nut Simulator<br>• Particles background</p>
     <button class="close-btn" id="closePopup">Close</button>
   </div>
@@ -241,9 +103,9 @@ body {
 <div class="header-container">
   <div class="title">❄️ Frosts Inc ❄️</div>
   <button class="discord-btn" onclick="window.open('https://discord.gg/mCUHppWjv7')">Join Discord</button>
+  <button id="settings-btn">⚙️ Settings</button>
 </div>
 
-<!-- ===== SEARCH & TOTAL GAMES ===== -->
 <div class="games-header">
   <input type="text" id="gameSearch" placeholder="Search games...">
   <div id="totalGames"></div>
@@ -251,129 +113,181 @@ body {
 
 <div class="games-container" id="games-container"></div>
 
+<div id="game-menu">
+  <iframe id="game-frame"></iframe>
+  <div class="menu-buttons">
+    <button id="fav-btn">Favorite</button>
+    <button id="fullscreen-btn">Fullscreen</button>
+    <button id="newtab-btn">New Tab (About:Blank)</button>
+    <button id="exit-btn">Exit</button>
+  </div>
+</div>
+
+<div id="settings-menu">
+  <div class="settings-box">
+    <h2>Settings</h2>
+    <label>Background:</label>
+    <select id="bgSelect">
+      <option value="animated">Gradient (Default)</option>
+      <option value="blank">Blank</option>
+      <option value="dots">Reactive Dots</option>
+    </select>
+
+    <label>Mode:</label>
+    <select id="modeSelect">
+      <option value="dark">Dark</option>
+      <option value="light">Light</option>
+    </select>
+
+    <label>Spoof Name:</label>
+    <input type="text" id="spoofMode" placeholder="Google Classroom">
+
+    <label>Spoof Icon URL:</label>
+    <input type="text" id="spoofIcon" placeholder="icons/classroom.jpg">
+
+    <button id="closeSettings">Close</button>
+  </div>
+</div>
+
 <script>
-/* ===== EASY GAME DATA ===== */
-const GAMES = [
-  { title: "CSGO Clicker", description: "Click your way to victory!", image: "thumbnails/csgo.png", link: "games/csgoclicker/index.html" },
-  { title: "Nut Simulator", description: "Nuts", image: "thumbnails/nut.png", link: "games/nut-simulator/index.html" },
-  { title: "Tiny Fishing", description: "Fishing 🎣", image: "thumbnails/tiny-fishing.jpg", link: "games/tinyfishing/index.html" },
-  { title: "Bit Life", description: "Life Sim Ig 🤷‍♂️", image: "thumbnails/bitlife.jpg", link: "games/bitlife/index.html" },
-  { title: "Drift Hunters", description: "Driftinggg", image: "thumbnails/drifthunters.jpg", link: "games/drifthunters/index.html" },
-  { title: "Basketball Legends 2020", description: "Green FN 🥷🏀", image: "thumbnails/basketball1.jpg", link: "games/basketballlegends/index.html" },
-  { title: "Basketball Stars", description: "Green FN 🥷⭐", image: "thumbnails/basketball2.jpg", link: "games/basketballstars/index.html" },
-  { title: "Basketball Bros IO", description: "Green FN 🥷🥷", image: "thumbnails/basketball3.jpg", link: "games/basketbrosio/index.html" },
-  { title: "Cookie Clicker", description: "Click them Cookies", image: "thumbnails/cookieclicker.jpg", link: "games/cookieclicker/index.html" },
-  { title: "Retro Bowl", description: "🏈", image: "thumbnails/retrobowl.jpg", link: "games/retrobowl/index.html" },
-  { title: "Coming Soon", description: "More games on the way...", image: "thumbnails/comingsoon.png", link: "#" }
+/* ===== COOKIES HELPER ===== */
+function setCookie(name,value,days){ const d=new Date(); d.setTime(d.getTime()+(days*24*60*60*1000)); document.cookie=`${name}=${encodeURIComponent(value)};expires=${d.toUTCString()};path=/`; }
+function getCookie(name){ const match=document.cookie.match(new RegExp('(^| )'+name+'=([^;]+)')); return match?decodeURIComponent(match[2]):null; }
+
+/* ===== GAME DATA ===== */
+const GAMES=[
+{title:"CSGO Clicker",description:"Click your way to victory!",image:"thumbnails/csgo.png",link:"games/csgoclicker/index.html"},
+{title:"Nut Simulator",description:"Nuts",image:"thumbnails/nut.png",link:"games/nut-simulator/index.html"},
+{title:"Tiny Fishing",description:"Fishing 🎣",image:"thumbnails/tiny-fishing.jpg",link:"games/tinyfishing/index.html"},
+{title:"Cluster Rush",description:"🚚🏃‍♂️",image:"thumbnails/clusterrush.jpg",link:"games/clusterrush/index.html"},
+{title:"Bit Life",description:"Life Sim Ig 🤷‍♂️",image:"thumbnails/bitlife.jpg",link:"games/bitlife/index.html"},
+{title:"Stack",description:"Stack",image:"thumbnails/stack.jpg",link:"games/stack/game.html"},
+{title:"Crossy Roads",description:"🐔🚙",image:"thumbnails/crossyroads.jpg",link:"games/crossyroads/index.html"},
+{title:"Drift Hunters",description:"Driftinggg",image:"thumbnails/drifthunters.jpg",link:"games/drifthunters/index.html"},
+{title:"Basketball Legends 2020",description:"Green FN 🥷🏀",image:"thumbnails/basketball1.jpg",link:"games/basketballlegends/index.html"},
+{title:"Basketball Stars",description:"Green FN 🥷⭐",image:"thumbnails/basketball2.jpg",link:"games/basketballstars/index.html"},
+{title:"Basketball Bros IO",description:"Green FN 🥷🥷",image:"thumbnails/basketball3.jpg",link:"games/basketbrosio/index.html"},
+{title:"Cookie Clicker",description:"Click them Cookies",image:"thumbnails/cookieclicker.jpg",link:"games/cookieclicker/index.html"},
+{title:"Retro Bowl",description:"🏈",image:"thumbnails/retrobowl.jpg",link:"games/retrobowl/index.html"},
+{title:"Clicker Heros",description:"⚔️",image:"thumbnails/clickerheros.jpg",link:"games/clickerheroes/index.html"},
+{title:"PacMan",description:"idk",image:"thumbnails/pacman.jpg",link:"games/pacman/index.html"},
+{title:"Coming Soon",description:"More games on the way...",image:"thumbnails/comingsoon.png",link:"#"}
 ];
 
+/* ===== FAVORITES ===== */
+let favorites = JSON.parse(getCookie("favorites")||"[]");
+
+/* ===== SETTINGS ===== */
+const bgSelect=document.getElementById("bgSelect");
+const modeSelect=document.getElementById("modeSelect");
+const spoofInput=document.getElementById("spoofMode");
+const spoofIconInput=document.getElementById("spoofIcon");
+const favicon=document.getElementById("favicon");
+
+/* Load settings from cookies */
+if(getCookie("bg")) bgSelect.value=getCookie("bg"); bgSelect.dispatchEvent(new Event("change"));
+if(getCookie("mode")){ modeSelect.value=getCookie("mode"); modeSelect.dispatchEvent(new Event("change")); }
+if(getCookie("spoofName")) spoofInput.value=getCookie("spoofName"); spoofInput.dispatchEvent(new Event("change"));
+if(getCookie("spoofIcon")) spoofIconInput.value=getCookie("spoofIcon"); spoofIconInput.dispatchEvent(new Event("change"));
+
 /* ===== RENDER GAMES ===== */
-const container = document.getElementById("games-container");
-const totalGamesEl = document.getElementById("totalGames");
-const searchInput = document.getElementById("gameSearch");
+const container=document.getElementById("games-container");
+const totalGamesEl=document.getElementById("totalGames");
+const searchInput=document.getElementById("gameSearch");
 
-function renderGames(filter = "") {
-  container.innerHTML = "";
-  const filteredGames = GAMES.filter(g =>
-    g.title.toLowerCase().includes(filter.toLowerCase())
-  );
+function renderGames(filter=""){
+  container.innerHTML="";
+  const favGames=GAMES.filter(g=>favorites.includes(g.title) && g.title.toLowerCase().includes(filter.toLowerCase()));
+  const normalGames=GAMES.filter(g=>!favorites.includes(g.title) && g.title.toLowerCase().includes(filter.toLowerCase()));
 
-  filteredGames.forEach(game => {
-    const card = document.createElement("a");
-    card.className = "game-card";
-    card.href = game.link;
-    card.target = "_blank";
-
-    card.innerHTML = `
-      <img class="card-image" src="${game.image}">
-      <div class="card-content">
-        <div class="game-title">${game.title}</div>
-        <div class="game-description">${game.description}</div>
-      </div>
-    `;
-
-    card.addEventListener("mousemove", e => {
-      const r = card.getBoundingClientRect();
-      const x = e.clientX - r.left;
-      const y = e.clientY - r.top;
-      const rx = ((y / r.height) - 0.5) * 25;
-      const ry = ((x / r.width) - 0.5) * -25;
-      card.style.transform = `rotateX(${rx}deg) rotateY(${ry}deg) scale(1.03)`;
-    });
-
-    card.addEventListener("mouseleave", () => {
-      card.style.transform = "none";
-    });
-
-    container.appendChild(card);
-  });
-
-  totalGamesEl.textContent = `Total Games: ${filteredGames.length}`;
+  if(favGames.length>0){
+    const favTitle=document.createElement("div"); favTitle.className="section-title"; favTitle.textContent="Favorites"; container.appendChild(favTitle);
+    favGames.forEach(addGameCard);
+  }
+  if(normalGames.length>0){
+    const allTitle=document.createElement("div"); allTitle.className="section-title"; allTitle.textContent="All Games"; container.appendChild(allTitle);
+    normalGames.forEach(addGameCard);
+  }
+  totalGamesEl.textContent=`Total Games: ${favGames.length+normalGames.length}`;
 }
 
-// Initial render
+function addGameCard(game){
+  const card=document.createElement("a");
+  card.className="game-card"; card.href=game.link;
+  card.innerHTML=`<img class="card-image" src="${game.image}"><div class="card-content"><div class="game-title">${game.title}</div><div class="game-description">${game.description}</div></div>`;
+  card.addEventListener("click", e=>{ e.preventDefault(); openGameMenu(game); });
+  container.appendChild(card);
+}
+
 renderGames();
+searchInput.addEventListener("input", e=>renderGames(e.target.value));
 
-// Search filter
-searchInput.addEventListener("input", e => {
-  renderGames(e.target.value);
-});
+/* ===== GAME MENU ===== */
+const menu=document.getElementById("game-menu");
+const iframe=document.getElementById("game-frame");
 
-/* ===== BACKGROUND REACTIVE ===== */
-const bg = document.getElementById("background");
-const glow = document.getElementById("mouse-glow");
+function openGameMenu(game){ menu.style.display="flex"; iframe.src=game.link; iframe.dataset.title=game.title; }
 
-document.addEventListener("mousemove", e => {
-  bg.style.transform = `translate(${(e.clientX / innerWidth - .5) * 30}px, ${(e.clientY / innerHeight - .5) * 30}px)`;
-  glow.style.left = e.clientX + "px";
-  glow.style.top = e.clientY + "px";
-});
+document.getElementById("exit-btn").onclick=()=>{ iframe.src=""; menu.style.display="none"; };
+
+document.getElementById("fullscreen-btn").onclick=()=>{ if(iframe.requestFullscreen) iframe.requestFullscreen(); else if(iframe.webkitRequestFullscreen) iframe.webkitRequestFullscreen(); else if(iframe.msRequestFullscreen) iframe.msRequestFullscreen(); };
+
+document.getElementById("fav-btn").onclick=()=>{
+  const title=iframe.dataset.title;
+  if(!favorites.includes(title)){ favorites.push(title); setCookie("favorites",JSON.stringify(favorites),365); alert(title+" added to favorites!"); renderGames(searchInput.value); } else alert(title+" already favorited!");
+};
+
+document.getElementById("newtab-btn").onclick=()=>{
+  const newWin=window.open("about:blank","_blank");
+  newWin.document.write(`<title>${spoofInput.value||iframe.dataset.title}</title><link rel="icon" href="${spoofIconInput.value||'icons/logo.jpg'}"><style>body{margin:0;background:#000;display:flex;justify-content:center;align-items:center;height:100vh;} iframe{width:100%;height:100%;border:none;}</style><iframe src="${iframe.src}"></iframe>`);
+  newWin.document.close();
+};
+
+/* ===== SETTINGS MENU ===== */
+const settingsBtn=document.getElementById("settings-btn");
+const settingsMenu=document.getElementById("settings-menu");
+const closeSettings=document.getElementById("closeSettings");
+
+settingsBtn.onclick=()=>settingsMenu.style.display="flex";
+closeSettings.onclick=()=>settingsMenu.style.display="none";
+
+/* ===== SETTINGS CHANGES ===== */
+bgSelect.addEventListener("change",()=>{ setCookie("bg",bgSelect.value,365); applyBG(bgSelect.value); });
+modeSelect.addEventListener("change",()=>{ setCookie("mode",modeSelect.value,365); applyMode(modeSelect.value); });
+spoofInput.addEventListener("change",()=>{ setCookie("spoofName",spoofInput.value,365); applySpoof(); });
+spoofIconInput.addEventListener("change",()=>{ setCookie("spoofIcon",spoofIconInput.value,365); applySpoof(); });
+
+function applyBG(val){
+  const bg=document.getElementById("background");
+  const canvas=document.getElementById("particles-canvas");
+  const glow=document.getElementById("mouse-glow");
+  if(val==="blank"){ bg.style.background="black"; bg.style.animation=""; canvas.style.display="none"; glow.style.display="none"; }
+  else if(val==="animated"){ bg.style.background="radial-gradient(circle at 20% 20%, #00ffff22, transparent 40%), radial-gradient(circle at 80% 30%, #8000ff22, transparent 45%), radial-gradient(circle at 50% 80%, #00ffff22, transparent 50%), linear-gradient(120deg, #050505, #000)"; bg.style.animation="hueShift 20s infinite alternate"; canvas.style.display="block"; glow.style.display="block"; }
+  else if(val==="dots"){ bg.style.background="black"; bg.style.animation=""; canvas.style.display="block"; glow.style.display="block"; }
+}
+
+function applyMode(val){ document.body.className=val==="light"?"light-mode":""; }
+
+function applySpoof(){ document.title=spoofInput.value||"Frosts Inc"; favicon.href=spoofIconInput.value||"icons/logo.jpg"; }
+
+/* ===== BACKGROUND MOVEMENT ===== */
+const bg=document.getElementById("background"); const glow=document.getElementById("mouse-glow");
+document.addEventListener("mousemove",e=>{ bg.style.transform=`translate(${(e.clientX/innerWidth-.5)*30}px, ${(e.clientY/innerHeight-.5)*30}px)`; glow.style.left=e.clientX+"px"; glow.style.top=e.clientY+"px"; });
 
 /* ===== PARTICLES ===== */
-const canvas = document.getElementById("particles-canvas");
-const ctx = canvas.getContext("2d");
-
-function resize() {
-  canvas.width = innerWidth;
-  canvas.height = innerHeight;
-}
-resize();
-onresize = resize;
-
-const particles = Array.from({length: 100}, () => ({
-  x: Math.random() * canvas.width,
-  y: Math.random() * canvas.height,
-  vx: (Math.random() - .5) * .4,
-  vy: (Math.random() - .5) * .4,
-  r: Math.random() * 2 + 1
-}));
-
-function animate() {
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-  particles.forEach(p => {
-    p.x += p.vx;
-    p.y += p.vy;
-    if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
-    if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
-    ctx.fillStyle = "rgba(136,192,224,0.3)";
-    ctx.beginPath();
-    ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-    ctx.fill();
-  });
-  requestAnimationFrame(animate);
-}
+const canvas=document.getElementById("particles-canvas"); const ctx=canvas.getContext("2d");
+function resize(){ canvas.width=innerWidth; canvas.height=innerHeight; } resize(); onresize=resize;
+const particles=Array.from({length:100},()=>({x:Math.random()*canvas.width,y:Math.random()*canvas.height,vx:(Math.random()-.5)*.4,vy:(Math.random()-.5)*.4,r:Math.random()*2+1}));
+function animate(){ ctx.clearRect(0,0,canvas.width,canvas.height); particles.forEach(p=>{ p.x+=p.vx; p.y+=p.vy; if(p.x<0||p.x>canvas.width)p.vx*=-1; if(p.y<0||p.y>canvas.height)p.vy*=-1; ctx.fillStyle="rgba(136,192,224,0.3)"; ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2); ctx.fill(); }); requestAnimationFrame(animate); }
 animate();
 
 /* ===== LOADING + POPUP ===== */
-window.onload = () => {
-  document.getElementById("loading-screen").style.display = "none";
-  document.getElementById("update-popup").style.display = "flex";
-};
+window.onload=()=>{ document.getElementById("loading-screen").style.display="none"; document.getElementById("update-popup").style.display="flex"; };
+document.getElementById("closePopup").onclick=()=>document.getElementById("update-popup").style.display="none";
 
-document.getElementById("closePopup").onclick = () => {
-  document.getElementById("update-popup").style.display = "none";
-};
+/* ===== INITIAL SETTINGS APPLY ===== */
+applyBG(bgSelect.value); applyMode(modeSelect.value); applySpoof();
+
 </script>
-
 </body>
 </html>
