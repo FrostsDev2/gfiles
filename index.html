@@ -112,6 +112,36 @@ body {
   background: rgba(128,0,255,0.4);
 }
 
+/* ===== SEARCH & TOTAL GAMES ===== */
+.games-header {
+  text-align: center;
+  margin-top: 20px;
+}
+
+#gameSearch {
+  padding: 10px 15px;
+  border-radius: 12px;
+  border: 1px solid #00ffff;
+  background: rgba(0,0,0,0.5);
+  color: #fff;
+  outline: none;
+  width: 220px;
+  margin-bottom: 10px;
+  text-align: center;
+  transition: 0.3s;
+  box-shadow: 0 0 8px #00ffff55;
+}
+
+#gameSearch:focus {
+  box-shadow: 0 0 20px #00ffffaa;
+}
+
+#totalGames {
+  margin-top: 5px;
+  font-size: 1em;
+  color: #88c0d0;
+}
+
 /* ===== GAMES GRID ===== */
 .games-container {
   display: grid;
@@ -121,7 +151,6 @@ body {
   max-width: 1200px;
   margin: auto;
 }
-
 
 .game-card {
   max-width: 250px;
@@ -137,14 +166,12 @@ body {
   transition: transform 0.2s ease;
 }
 
-
 .card-image {
   width: 100%;
   height: 200px;
   object-fit: cover;
   display: block;
 }
-
 
 .card-content {
   padding: 15px;
@@ -216,120 +243,80 @@ body {
   <button class="discord-btn" onclick="window.open('https://discord.com','_blank')">Join Discord</button>
 </div>
 
+<!-- ===== SEARCH & TOTAL GAMES ===== -->
+<div class="games-header">
+  <input type="text" id="gameSearch" placeholder="Search games...">
+  <div id="totalGames"></div>
+</div>
+
 <div class="games-container" id="games-container"></div>
 
 <script>
 /* ===== EASY GAME DATA ===== */
 const GAMES = [
-  {
-    title: "CSGO Clicker",
-    description: "Click your way to victory!",
-    image: "thumbnails/csgo.png",
-    link: "games/csgoclicker/index.html"
-  },
-
-{
-    title: "Nut Simulator",
-    description: "Nuts",
-    image: "thumbnails/nut.png",
-    link: "games/nut-simulator/index.html"
-  },
-
-{
-    title: "Tiny Fishing",
-    description: "Fishing 🎣",
-    image: "thumbnails/tiny-fishing.jpg",
-    link: "games/tinyfishing/index.html"
-  },
-
-  {
-    title: "Bit Life",
-    description: "Life Sim Ig 🤷‍♂️",
-    image: "thumbnails/bitlife.jpg",
-    link: "games/bitlife/index.html"
-  },
-
-    {
-    title: "Drift Hunters",
-    description: "Driftinggg",
-    image: "thumbnails/drifthunters.jpg",
-    link: "games/drifthunters/index.html"
-  },
-
-      {
-    title: "Basketball Legends 2020",
-    description: "Green FN 🥷🏀",
-    image: "thumbnails/basketball1.jpg",
-    link: "games/basketballlegends/index.html"
-  },
-
-        {
-    title: "Basketball Stars",
-    description: "Green FN 🥷⭐",
-    image: "thumbnails/basketball2.jpg",
-    link: "games/basketballstars/index.html"
-  },
-
-          {
-    title: "Basketball Bros IO",
-    description: "Green FN 🥷🥷",
-    image: "thumbnails/basketball3.jpg",
-    link: "games/basketbrosio/index.html"
-  },
-
-            {
-    title: "Cookie Clicker",
-    description: "Click them Cookies",
-    image: "thumbnails/cookieclicker.jpg",
-    link: "games/cookieclicker/index.html"
-  },
-
-              {
-    title: "Retro Bowl",
-    description: "🏈",
-    image: "thumbnails/retrobowl.jpg",
-    link: "games/retrobowl/index.html"
-  },
-
-  {
-    title: "Coming Soon",
-    description: "More games on the way...",
-    image: "thumbnails/comingsoon.png",
-    link: "#"
-  }
+  { title: "CSGO Clicker", description: "Click your way to victory!", image: "thumbnails/csgo.png", link: "games/csgoclicker/index.html" },
+  { title: "Nut Simulator", description: "Nuts", image: "thumbnails/nut.png", link: "games/nut-simulator/index.html" },
+  { title: "Tiny Fishing", description: "Fishing 🎣", image: "thumbnails/tiny-fishing.jpg", link: "games/tinyfishing/index.html" },
+  { title: "Bit Life", description: "Life Sim Ig 🤷‍♂️", image: "thumbnails/bitlife.jpg", link: "games/bitlife/index.html" },
+  { title: "Drift Hunters", description: "Driftinggg", image: "thumbnails/drifthunters.jpg", link: "games/drifthunters/index.html" },
+  { title: "Basketball Legends 2020", description: "Green FN 🥷🏀", image: "thumbnails/basketball1.jpg", link: "games/basketballlegends/index.html" },
+  { title: "Basketball Stars", description: "Green FN 🥷⭐", image: "thumbnails/basketball2.jpg", link: "games/basketballstars/index.html" },
+  { title: "Basketball Bros IO", description: "Green FN 🥷🥷", image: "thumbnails/basketball3.jpg", link: "games/basketbrosio/index.html" },
+  { title: "Cookie Clicker", description: "Click them Cookies", image: "thumbnails/cookieclicker.jpg", link: "games/cookieclicker/index.html" },
+  { title: "Retro Bowl", description: "🏈", image: "thumbnails/retrobowl.jpg", link: "games/retrobowl/index.html" },
+  { title: "Coming Soon", description: "More games on the way...", image: "thumbnails/comingsoon.png", link: "#" }
 ];
 
 /* ===== RENDER GAMES ===== */
 const container = document.getElementById("games-container");
+const totalGamesEl = document.getElementById("totalGames");
+const searchInput = document.getElementById("gameSearch");
 
-GAMES.forEach(game => {
-  const card = document.createElement("a");
-  card.className = "game-card";
-  card.href = game.link;
-  card.target = "_blank";
+function renderGames(filter = "") {
+  container.innerHTML = "";
+  const filteredGames = GAMES.filter(g =>
+    g.title.toLowerCase().includes(filter.toLowerCase())
+  );
 
-  card.innerHTML = `
-    <img class="card-image" src="${game.image}">
-    <div class="card-content">
-      <div class="game-title">${game.title}</div>
-      <div class="game-description">${game.description}</div>
-    </div>
-  `;
+  filteredGames.forEach(game => {
+    const card = document.createElement("a");
+    card.className = "game-card";
+    card.href = game.link;
+    card.target = "_blank";
 
-  card.addEventListener("mousemove", e => {
-    const r = card.getBoundingClientRect();
-    const x = e.clientX - r.left;
-    const y = e.clientY - r.top;
-    const rx = ((y / r.height) - 0.5) * 25;
-    const ry = ((x / r.width) - 0.5) * -25;
-    card.style.transform = `rotateX(${rx}deg) rotateY(${ry}deg) scale(1.03)`;
+    card.innerHTML = `
+      <img class="card-image" src="${game.image}">
+      <div class="card-content">
+        <div class="game-title">${game.title}</div>
+        <div class="game-description">${game.description}</div>
+      </div>
+    `;
+
+    card.addEventListener("mousemove", e => {
+      const r = card.getBoundingClientRect();
+      const x = e.clientX - r.left;
+      const y = e.clientY - r.top;
+      const rx = ((y / r.height) - 0.5) * 25;
+      const ry = ((x / r.width) - 0.5) * -25;
+      card.style.transform = `rotateX(${rx}deg) rotateY(${ry}deg) scale(1.03)`;
+    });
+
+    card.addEventListener("mouseleave", () => {
+      card.style.transform = "none";
+    });
+
+    container.appendChild(card);
   });
 
-  card.addEventListener("mouseleave", () => {
-    card.style.transform = "none";
-  });
+  totalGamesEl.textContent = `Total Games: ${filteredGames.length}`;
+}
 
-  container.appendChild(card);
+// Initial render
+renderGames();
+
+// Search filter
+searchInput.addEventListener("input", e => {
+  renderGames(e.target.value);
 });
 
 /* ===== BACKGROUND REACTIVE ===== */
