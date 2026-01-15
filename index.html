@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>404. That’s an error.</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+*{
+  margin:0; padding:0; box-sizing:border-box;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+body{
+  background:#fff;
+  color:#202124;
+  display:flex;
+  justify-content:center;
+  padding:60px 20px;
+}
+
+.wrapper{
+  max-width:700px;
+}
+
+.logo{
+  font-size:28px;
+  font-weight:bold;
+  margin-bottom:25px;
+}
+
+.logo span:nth-child(1){color:#4285F4;}
+.logo span:nth-child(2){color:#EA4335;}
+.logo span:nth-child(3){color:#FBBC05;}
+.logo span:nth-child(4){color:#4285F4;}
+.logo span:nth-child(5){color:#34A853;}
+.logo span:nth-child(6){color:#EA4335;}
+
+h1{
+  font-size:22px;
+  font-weight:normal;
+  margin-bottom:10px;
+}
+
+p{
+  font-size:14px;
+  color:#5f6368;
+  line-height:1.6;
+}
+
+ul{
+  margin-top:10px;
+  padding-left:20px;
+  color:#5f6368;
+  font-size:14px;
+}
+
+a{
+  color:#1a73e8;
+  text-decoration:none;
+}
+a:hover{ text-decoration:underline; }
+</style>
+</head>
+
+<body>
+
+<div class="wrapper">
+  <div class="logo">
+    <span>G</span><span>o</span><span>o</span><span>g</span><span>l</span><span>e</span>
+  </div>
+
+  <h1>404. That’s an error.</h1>
+
+  <p>The requested URL was not found on this server. That’s all we know.</p>
+
+  <ul>
+    <li>Check the address for typing errors</li>
+    <li>Return to the <a href="/">homepage</a></li>
+  </ul>
+</div>
+
+<script>
+/* ---------- COOKIE HELPERS ---------- */
+function setCookie(name, value, days){
+  const d = new Date();
+  d.setTime(d.getTime() + (days*24*60*60*1000));
+  document.cookie = name + "=" + value + ";expires=" + d.toUTCString() + ";path=/";
+}
+
+function getCookie(name){
+  const n = name + "=";
+  const ca = document.cookie.split(';');
+  for(let c of ca){
+    while(c.charAt(0) === ' ') c = c.substring(1);
+    if(c.indexOf(n) === 0) return c.substring(n.length, c.length);
+  }
+  return null;
+}
+
+/* ---------- AUTO REDIRECT IF UNLOCKED BEFORE ---------- */
+if(getCookie("skip404") === "true"){
+  window.location.replace("index2.html");
+}
+
+/* ---------- SECRET KEY COMBO (SHIFT + S) ---------- */
+document.addEventListener("keydown", e => {
+  if(e.shiftKey && e.key.toLowerCase() === "s"){
+    setCookie("skip404", "true", 30); // remember 30 days
+    window.location.replace("index2.html");
+  }
+});
+</script>
+
+</body>
+</html>
