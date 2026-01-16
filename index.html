@@ -1,116 +1,1701 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3294172390463223"
+     crossorigin="anonymous"></script>
 <meta charset="UTF-8">
-<title>404. That’s an error.</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+<title>Frosts Inc - Game Portal</title>
+<link rel="icon" id="favicon" href="icons/logo.jpg">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800&family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
-*{
-  margin:0; padding:0; box-sizing:border-box;
-  font-family: Arial, Helvetica, sans-serif;
+* { margin:0; padding:0; box-sizing:border-box; }
+
+:root {
+  --primary: #00ffff;
+  --secondary: #8000ff;
+  --accent: #ff0044;
+  --dark: #050505;
+  --light: #f2f2f2;
+  --card-bg: rgba(20, 20, 30, 0.7);
+  --text: #fff;
+  --text-secondary: #88c0d0;
+  --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+  --border-radius: 16px;
+  --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  --glow: 0 0 15px;
 }
 
-body{
-  background:#fff;
-  color:#202124;
+body {
+  font-family: 'Open Sans', sans-serif;
+  background: var(--dark);
+  color: var(--text);
+  overflow-x: hidden;
+  transition: background 0.5s, color 0.5s;
+  min-height: 100vh;
+}
+
+/* ===== BACKGROUNDS ===== */
+#background {
+  position: fixed;
+  inset:0;
+  background:
+    radial-gradient(circle at 20% 20%, #00ffff22, transparent 40%),
+    radial-gradient(circle at 80% 30%, #8000ff22, transparent 45%),
+    radial-gradient(circle at 50% 80%, #00ffff22, transparent 50%),
+    linear-gradient(120deg, #050505, #000);
+  animation: hueShift 25s infinite alternate;
+  z-index:-3;
+  transition: transform 0.15s ease-out;
+}
+
+@keyframes hueShift { 
+  0% { filter: hue-rotate(0deg) saturate(1); }
+  50% { filter: hue-rotate(25deg) saturate(1.2); }
+  100% { filter: hue-rotate(0deg) saturate(1); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.15; }
+  50% { opacity: 0.25; }
+}
+
+#mouse-glow {
+  position:fixed;
+  width:400px;
+  height:400px;
+  background: radial-gradient(circle, rgba(0,255,255,0.15), transparent 60%);
+  pointer-events:none;
+  transform:translate(-50%,-50%);
+  z-index:-2;
+  animation: pulse 4s infinite ease-in-out;
+}
+
+#particles-canvas {
+  position:fixed;
+  inset:0;
+  z-index:-1;
+}
+
+/* ===== LOADING SCREEN ===== */
+#loading-screen {
+  position:fixed;
+  inset:0;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  background:#000;
+  z-index:9999;
+  transition: opacity 0.8s, visibility 0.8s;
+}
+
+.loader-container {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  margin-bottom: 30px;
+}
+
+.neon-loader {
+  width: 100%;
+  height: 100%;
+  border: 4px solid transparent;
+  border-top: 4px solid var(--primary);
+  border-bottom: 4px solid var(--secondary);
+  border-radius: 50%;
+  animation: spin 1.5s linear infinite;
+  box-shadow: 0 0 20px var(--primary);
+}
+
+.inner-loader {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  width: 80px;
+  height: 80px;
+  border: 3px solid transparent;
+  border-left: 3px solid var(--accent);
+  border-right: 3px solid var(--accent);
+  border-radius: 50%;
+  animation: spinReverse 2s linear infinite;
+}
+
+.loader-text {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.5rem;
+  color: var(--primary);
+  text-shadow: 0 0 10px var(--primary);
+  letter-spacing: 3px;
+  margin-top: 20px;
+  position: relative;
+}
+
+.loader-text::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--primary), transparent);
+  animation: loadingBar 2s infinite ease-in-out;
+}
+
+@keyframes spin { 
+  to { transform: rotate(360deg); } 
+}
+
+@keyframes spinReverse { 
+  to { transform: rotate(-360deg); } 
+}
+
+@keyframes loadingBar {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+/* ===== HEADER ===== */
+.header-container {
+  text-align:center;
+  margin-top: 40px;
+  padding: 0 20px;
+  position: relative;
+}
+
+.title {
+  font-family:'Orbitron', sans-serif;
+  font-size: 3.5rem;
+  color: var(--primary);
+  text-shadow: var(--glow) var(--primary);
+  letter-spacing: 2px;
+  margin-bottom: 20px;
+  position: relative;
+  display: inline-block;
+}
+
+.title::before, .title::after {
+  content: '❄️';
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 2rem;
+  opacity: 0.8;
+}
+
+.title::before { left: -50px; }
+.title::after { right: -50px; }
+
+.header-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+.btn {
+  padding: 12px 28px;
+  border-radius: 50px;
+  border: none;
+  background: rgba(128,0,255,0.25);
+  backdrop-filter: blur(10px);
+  color: white;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 600;
+  letter-spacing: 1px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.btn:hover {
+  transform: translateY(-5px) scale(1.05);
+  background: rgba(128,0,255,0.4);
+  box-shadow: 0 10px 20px rgba(128,0,255,0.3);
+}
+
+.btn i { font-size: 1.2rem; }
+
+.discord-btn { border: 1px solid var(--secondary); }
+.settings-btn { border: 1px solid var(--primary); background: rgba(0,255,255,0.15); }
+.tos-btn { border: 1px solid #ffaa00; background: rgba(255,170,0,0.15); }
+
+/* ===== SEARCH & TOTAL GAMES ===== */
+.games-header {
+  text-align:center;
+  margin-top: 40px;
+  padding: 0 20px;
+}
+
+.search-container {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 20px;
+}
+
+.search-container i {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--primary);
+  z-index: 1;
+}
+
+#gameSearch {
+  padding: 12px 20px 12px 45px;
+  border-radius: 50px;
+  border: 2px solid var(--primary);
+  background: rgba(0,0,0,0.6);
+  color: var(--text);
+  outline: none;
+  width: 280px;
+  transition: var(--transition);
+  font-size: 1rem;
+  box-shadow: 0 0 10px rgba(0,255,255,0.3);
+}
+
+#gameSearch:focus {
+  width: 320px;
+  box-shadow: 0 0 25px rgba(0,255,255,0.6);
+}
+
+#totalGames {
+  margin-top: 10px;
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  font-family: 'Orbitron', sans-serif;
+  letter-spacing: 1px;
+}
+
+/* ===== GAMES GRID ===== */
+.games-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 30px;
+  padding: 40px;
+  max-width: 1400px;
+  margin: 40px auto;
+  position: relative;
+}
+
+.section-title {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  color: var(--primary);
+  text-align: center;
+  grid-column: 1/-1;
+  font-family: 'Orbitron', sans-serif;
+  position: relative;
+  padding-bottom: 10px;
+}
+
+.section-title::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100px;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, var(--primary), transparent);
+}
+
+.game-card {
+  background: var(--card-bg);
+  backdrop-filter: blur(15px);
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  text-decoration: none;
+  color: white;
+  box-shadow: var(--card-shadow);
+  transition: var(--transition);
+  position: relative;
+  border: 1px solid rgba(255,255,255,0.1);
+  opacity: 0;
+  transform: translateY(30px);
+  animation: cardAppear 0.6s forwards;
+}
+
+.game-card.favorite {
+  border: 1px solid rgba(255, 215, 0, 0.3);
+  box-shadow: 0 10px 30px rgba(255, 215, 0, 0.2);
+}
+
+.game-card.favorite .favorite-badge {
+  display: block;
+}
+
+@keyframes cardAppear {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.game-card:hover {
+  transform: translateY(-15px) scale(1.03);
+  box-shadow: 0 20px 40px rgba(0, 255, 255, 0.3);
+  border-color: rgba(0, 255, 255, 0.3);
+}
+
+.card-image-container {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+}
+
+.card-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s ease;
+}
+
+.game-card:hover .card-image {
+  transform: scale(1.1);
+}
+
+.favorite-badge {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: rgba(0,0,0,0.7);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: gold;
+  font-size: 1.2rem;
+  display: none;
+}
+
+.card-content {
+  padding: 20px;
+}
+
+.game-title {
+  font-size: 1.4rem;
+  color: var(--text-secondary);
+  margin-bottom: 10px;
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 600;
+}
+
+.game-description {
+  font-size: 0.95rem;
+  color: #ccc;
+  line-height: 1.5;
+  margin-bottom: 15px;
+}
+
+.play-btn {
+  display: inline-block;
+  padding: 8px 20px;
+  background: linear-gradient(90deg, var(--primary), var(--secondary));
+  color: white;
+  border-radius: 50px;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+  letter-spacing: 1px;
+  transition: var(--transition);
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  text-align: center;
+}
+
+.play-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(0, 255, 255, 0.4);
+}
+
+/* ===== UPDATE POPUP ===== */
+#update-popup {
+  position:fixed;
+  inset:0;
+  display:none;
+  justify-content:center;
+  align-items:center;
+  z-index:9998;
+  background: rgba(0,0,0,0.8);
+  backdrop-filter: blur(5px);
+}
+
+.popup-box {
+  background: rgba(30,30,30,0.95);
+  backdrop-filter: blur(20px);
+  padding: 40px;
+  border-radius: var(--border-radius);
+  max-width: 500px;
+  text-align:center;
+  border: 1px solid rgba(0,255,255,0.2);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.7);
+  transform: scale(0.9);
+  animation: popupAppear 0.4s forwards;
+}
+
+@keyframes popupAppear {
+  to { transform: scale(1); }
+}
+
+.popup-box h2 {
+  color: var(--primary);
+  margin-bottom: 20px;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 2rem;
+}
+
+.popup-box p {
+  line-height: 1.6;
+  margin-bottom: 25px;
+  color: #ccc;
+}
+
+.close-btn {
+  margin-top: 20px;
+  padding: 12px 30px;
+  border-radius: 50px;
+  border: 2px solid var(--primary);
+  background: transparent;
+  color: var(--primary);
+  cursor: pointer;
+  font-weight: 600;
+  letter-spacing: 1px;
+  transition: var(--transition);
+}
+
+.close-btn:hover {
+  background: var(--primary);
+  color: #000;
+}
+
+/* ===== TOS MODAL ===== */
+#tos-modal {
+  position: fixed;
+  inset: 0;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 9997;
+  background: rgba(0,0,0,0.85);
+  backdrop-filter: blur(10px);
+}
+
+.tos-box {
+  background: rgba(20, 20, 30, 0.95);
+  backdrop-filter: blur(20px);
+  padding: 40px;
+  border-radius: var(--border-radius);
+  max-width: 700px;
+  max-height: 80vh;
+  overflow-y: auto;
+  border: 1px solid rgba(255,0,68,0.2);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.7);
+  transform: scale(0.9);
+  animation: popupAppear 0.4s forwards;
+}
+
+.tos-box h2 {
+  color: var(--accent);
+  margin-bottom: 20px;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 2rem;
+  text-align: center;
+}
+
+.tos-content {
+  line-height: 1.7;
+  color: #ccc;
+}
+
+.tos-content h3 {
+  color: var(--text-secondary);
+  margin: 20px 0 10px;
+  font-size: 1.3rem;
+}
+
+.tos-content p {
+  margin-bottom: 15px;
+}
+
+.tos-content ul {
+  margin-left: 20px;
+  margin-bottom: 20px;
+}
+
+.tos-content li {
+  margin-bottom: 8px;
+}
+
+.highlight {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+/* ===== GAME MENU ===== */
+#game-menu {
+  display:none;
+  position:fixed;
+  inset:0;
+  background: rgba(0,0,0,0.98);
+  z-index:10000;
+  flex-direction: column;
+  justify-content:center;
+  align-items:center;
+  padding: 30px;
+  backdrop-filter: blur(10px);
+}
+
+#game-menu iframe {
+  width:100%;
+  max-width: 1000px;
+  height: 70vh;
+  border:none;
+  border-radius: 12px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+  animation: iframeAppear 0.5s ease-out;
+}
+
+@keyframes iframeAppear {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+#game-menu .menu-buttons {
+  margin-top: 30px;
   display:flex;
   justify-content:center;
-  padding:60px 20px;
+  gap: 20px;
+  flex-wrap: wrap;
 }
 
-.wrapper{
-  max-width:700px;
+.menu-btn {
+  padding: 12px 25px;
+  border-radius: 50px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  letter-spacing: 1px;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Orbitron', sans-serif;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
 }
 
-.logo{
-  font-size:28px;
-  font-weight:bold;
-  margin-bottom:25px;
+.menu-btn:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.5);
 }
 
-.logo span:nth-child(1){color:#4285F4;}
-.logo span:nth-child(2){color:#EA4335;}
-.logo span:nth-child(3){color:#FBBC05;}
-.logo span:nth-child(4){color:#4285F4;}
-.logo span:nth-child(5){color:#34A853;}
-.logo span:nth-child(6){color:#EA4335;}
+#fav-btn { background:var(--primary); color:#000; }
+#fullscreen-btn { background:var(--secondary); color:#fff; }
+#newtab-btn { background:#ffaa00; color:#000; }
+#exit-btn { background:var(--accent); color:#fff; }
 
-h1{
-  font-size:22px;
-  font-weight:normal;
-  margin-bottom:10px;
+/* ===== SETTINGS MENU ===== */
+#settings-menu {
+  display:none;
+  position:fixed;
+  inset:0;
+  background: rgba(0,0,0,0.95);
+  z-index:10001;
+  flex-direction: column;
+  justify-content:center;
+  align-items:center;
+  padding:20px;
+  backdrop-filter: blur(10px);
 }
 
-p{
-  font-size:14px;
-  color:#5f6368;
-  line-height:1.6;
+.settings-box {
+  background: rgba(30,30,30,0.95);
+  backdrop-filter: blur(20px);
+  padding: 40px;
+  border-radius: var(--border-radius);
+  max-width: 500px;
+  width: 90%;
+  border: 1px solid rgba(0,255,255,0.2);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.7);
+  transform: scale(0.9);
+  animation: popupAppear 0.4s forwards;
 }
 
-ul{
-  margin-top:10px;
-  padding-left:20px;
-  color:#5f6368;
-  font-size:14px;
+.settings-box h2 {
+  color:var(--primary);
+  margin-bottom: 25px;
+  text-align: center;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 2rem;
 }
 
-a{
-  color:#1a73e8;
-  text-decoration:none;
+.setting-group {
+  margin-bottom: 20px;
 }
-a:hover{ text-decoration:underline; }
+
+.setting-group label {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+.setting-group select, .setting-group input[type="text"] {
+  width: 100%;
+  padding: 12px 15px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.2);
+  background: rgba(0,0,0,0.5);
+  color: white;
+  font-size: 1rem;
+  transition: var(--transition);
+}
+
+.setting-group select:focus, .setting-group input[type="text"]:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 10px rgba(0,255,255,0.3);
+  outline: none;
+}
+
+.checkbox-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.checkbox-group input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+}
+
+#closeSettings {
+  margin-top: 25px;
+  padding: 12px 30px;
+  border-radius: 50px;
+  border: 2px solid var(--primary);
+  background: transparent;
+  color: var(--primary);
+  cursor: pointer;
+  font-weight: 600;
+  letter-spacing: 1px;
+  transition: var(--transition);
+  width: 100%;
+}
+
+#closeSettings:hover {
+  background: var(--primary);
+  color: #000;
+}
+
+/* ===== DARK / LIGHT MODE ===== */
+body.light-mode {
+  background: var(--light);
+  color: #000;
+}
+
+body.light-mode .game-card {
+  background: rgba(255,255,255,0.8);
+  color: #000;
+  border: 1px solid rgba(0,0,0,0.1);
+}
+
+body.light-mode .game-title {
+  color: #0066cc;
+}
+
+body.light-mode .game-description {
+  color: #555;
+}
+
+body.light-mode #gameSearch {
+  background: rgba(255,255,255,0.8);
+  color: #000;
+  border-color: #0066cc;
+}
+
+/* ===== FOOTER ===== */
+footer {
+  text-align: center;
+  padding: 30px 20px;
+  margin-top: 40px;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+footer a {
+  color: var(--primary);
+  text-decoration: none;
+}
+
+/* ===== RESPONSIVE & PERFORMANCE OPTIMIZATIONS ===== */
+@media (max-width: 1024px), (hover: none), (pointer: coarse) {
+  /* Reduce animations on mobile/Chromebook */
+  .game-card:hover {
+    transform: translateY(-5px) scale(1.01);
+  }
+  
+  #background {
+    animation-duration: 60s;
+  }
+  
+  .game-card {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+  
+  .btn:hover, .menu-btn:hover {
+    transform: translateY(-2px);
+  }
+  
+  /* Reduce particle effects */
+  #mouse-glow {
+    animation: none;
+    opacity: 0.1;
+  }
+}
+
+@media (max-width: 768px) {
+  .title {
+    font-size: 2.5rem;
+  }
+  
+  .games-container {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    padding: 20px;
+    gap: 20px;
+  }
+  
+  #game-menu .menu-buttons {
+    flex-direction: column;
+    width: 90%;
+  }
+  
+  .menu-btn {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .header-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .btn {
+    width: 250px;
+  }
+}
+
+/* Performance mode styles */
+body.performance-mode {
+  --transition: all 0.2s ease;
+}
+
+body.performance-mode #background {
+  animation: none;
+  background: #000;
+}
+
+body.performance-mode .game-card {
+  animation: none;
+  opacity: 1;
+  transform: none;
+}
+
+body.performance-mode .game-card:hover {
+  transform: translateY(-5px);
+}
+
+body.performance-mode #mouse-glow,
+body.performance-mode #particles-canvas {
+  display: none !important;
+}
+
+/* ===== SCROLLBAR ===== */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0,0,0,0.3);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--primary);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--secondary);
+}
+
+/* ===== NOTIFICATION ===== */
+.notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: rgba(20, 30, 40, 0.9);
+  color: white;
+  padding: 15px 25px;
+  border-radius: 10px;
+  backdrop-filter: blur(10px);
+  z-index: 10002;
+  border-left: 4px solid #00ff00;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transform: translateX(150%);
+  transition: transform 0.4s ease;
+}
+
+.notification.info {
+  border-left-color: #00ffff;
+}
 </style>
 </head>
-
 <body>
 
-<div class="wrapper">
-  <div class="logo">
-    <span>G</span><span>o</span><span>o</span><span>g</span><span>l</span><span>e</span>
+<!-- COOKIE CHECK MODAL REMOVED -->
+
+<div id="background"></div>
+<div id="mouse-glow"></div>
+<canvas id="particles-canvas"></canvas>
+
+<div id="loading-screen">
+  <div class="loader-container">
+    <div class="neon-loader"></div>
+    <div class="inner-loader"></div>
   </div>
+  <div class="loader-text">FROSTS INC</div>
+</div>
 
-  <h1>404. That’s an error.</h1>
+<div id="update-popup">
+  <div class="popup-box">
+    <h2>Version 1.0.7</h2>
+    <p>NEW SETTINGS!<br>NEW FAKE HOME PAGE :)<br>• TOTAL GAMES: 28<br>BY CONTINUING YOU AGREE TO THE ToS (Terms Of Service)</p>
+    <button class="close-btn" id="closePopup">Let's Play!</button>
+  </div>
+</div>
 
-  <p>The requested URL was not found on this server. That’s all we know.</p>
+<div id="tos-modal">
+  <div class="tos-box">
+    <h2><i class="fas fa-gavel"></i> Terms of Service</h2>
+    <div class="tos-content">
+      <h3>Important Legal Notice</h3>
+      <p>By accessing and using Frosts Inc ("the Service"), you acknowledge and agree to the following terms:</p>
+      
+      <h3>1. Game Ownership & Rights</h3>
+      <p><span class="highlight">Frosts Inc does NOT own the rights to any games hosted on this platform.</span> We only provide access to games that are publicly available on the internet. All game titles, characters, trademarks, and intellectual property belong to their respective owners.</p>
+      
+      <h3>2. No Affiliation</h3>
+      <p><span class="highlight">Frosts Inc is NOT affiliated with any school districts, educational institutions, or government agencies.</span> This service is provided for personal entertainment purposes only.</p>
+      
+      <h3>3. Educational Environment Disclaimer</h3>
+      <p><span class="highlight">We do NOT support or encourage playing games in a school environment during instructional time.</span> This platform is intended for personal use during appropriate free time and should not interfere with educational activities or responsibilities.</p>
+      
+      <h3>4. User Responsibility</h3>
+      <p>You are solely responsible for:</p>
+      <ul>
+        <li>Complying with your local laws and institutional policies</li>
+        <li>Using this service only during appropriate times and locations</li>
+        <li>Respecting intellectual property rights of game developers</li>
+        <li>Not using this service to bypass security measures or access restricted content</li>
+      </ul>
+      
+      <h3>5. Limitation of Liability</h3>
+      <p>Frosts Inc is not liable for any consequences resulting from the use of this service, including but not limited to:</p>
+      <ul>
+        <li>Academic consequences from inappropriate use</li>
+        <li>Legal issues arising from copyright infringement</li>
+        <li>Security breaches or malware infections</li>
+        <li>Device damage or data loss</li>
+      </ul>
+      
+      <p>By using this service, you agree to these terms and acknowledge that you are using this platform at your own risk.</p>
+    </div>
+    <button class="close-btn" id="closeTos">I Understand</button>
+  </div>
+</div>
 
-  <ul>
-    <li>Check the address for typing errors</li>
-    <li>Return to the <a href="/">homepage</a></li>
-  </ul>
+<div class="header-container">
+  <div class="title">FROSTS INC</div>
+  <div class="header-buttons">
+    <button class="btn discord-btn" onclick="window.open('https://discord.gg/mCUHppWjv7')">
+      <i class="fab fa-discord"></i> Join Discord
+    </button>
+    <button class="btn settings-btn" id="settings-btn">
+      <i class="fas fa-cog"></i> Settings
+    </button>
+    <button class="btn tos-btn" id="tos-btn">
+      <i class="fas fa-file-contract"></i> Terms of Service
+    </button>
+  </div>
+</div>
+
+<div class="games-header">
+  <div class="search-container">
+    <i class="fas fa-search"></i>
+    <input type="text" id="gameSearch" placeholder="Search games...">
+  </div>
+  <div id="totalGames"></div>
+</div>
+
+<div class="games-container" id="games-container">
+  <!-- Games will be dynamically inserted here -->
+</div>
+
+<footer>
+  <p>Frosts Inc Game Portal &copy; <span id="currentYear"></span> | For entertainment purposes only</p>
+  <p><i class="fas fa-exclamation-triangle"></i> Remember: Games should not interfere with educational activities</p>
+</footer>
+
+<div id="game-menu">
+  <iframe id="game-frame" title="Game Frame"></iframe>
+  <div class="menu-buttons">
+    <button class="menu-btn" id="fav-btn"><i class="fas fa-star"></i> Favorite</button>
+    <button class="menu-btn" id="fullscreen-btn"><i class="fas fa-expand"></i> Fullscreen</button>
+    <button class="menu-btn" id="newtab-btn"><i class="fas fa-external-link-alt"></i> New Tab</button>
+    <button class="menu-btn" id="exit-btn"><i class="fas fa-times"></i> Exit</button>
+  </div>
+</div>
+
+<div id="settings-menu">
+  <div class="settings-box">
+    <h2><i class="fas fa-cog"></i> Settings</h2>
+    
+    <div class="setting-group">
+      <label for="bgSelect">Background Style:</label>
+      <select id="bgSelect">
+        <option value="animated">Animated Gradient (Default)</option>
+        <option value="blank">Blank</option>
+        <option value="dots">Reactive Dots</option>
+        <option value="stars">Starry Night</option>
+      </select>
+    </div>
+
+    <div class="setting-group">
+      <label for="modeSelect">Theme:</label>
+      <select id="modeSelect">
+        <option value="dark">Dark Mode</option>
+        <option value="light">Light Mode</option>
+      </select>
+    </div>
+
+    <div class="setting-group">
+      <label for="spoofMode">Tab Title Spoof:</label>
+      <input type="text" id="spoofMode" placeholder="Google Classroom">
+    </div>
+
+    <div class="setting-group">
+      <label for="spoofIcon">Tab Icon URL:</label>
+      <input type="text" id="spoofIcon" placeholder="icons/classroom.jpg">
+    </div>
+
+    <div class="checkbox-group">
+      <input type="checkbox" id="performanceMode">
+      <label for="performanceMode">Performance Mode (reduces effects)</label>
+    </div>
+
+    <div class="checkbox-group">
+      <input type="checkbox" id="smoothScroll">
+      <label for="smoothScroll">Enable smooth scrolling</label>
+    </div>
+
+    <div class="checkbox-group">
+      <input type="checkbox" id="cardAnimations">
+      <label for="cardAnimations">Enable card animations</label>
+    </div>
+
+    <button id="closeSettings">Save & Close</button>
+  </div>
 </div>
 
 <script>
-/* ---------- COOKIE HELPERS ---------- */
-function setCookie(name, value, days){
+/* ===== PERFORMANCE DETECTION ===== */
+const isChromebook = /chrome os/i.test(navigator.userAgent);
+const isMobile = /mobile|android|webos|iphone|ipad|ipod/i.test(navigator.userAgent);
+const isLowPower = isChromebook || isMobile || window.innerWidth < 1024;
+
+// Set performance mode automatically for low-power devices
+if (isLowPower) {
+  console.log('Low power device detected - enabling performance mode');
+  document.body.classList.add('performance-mode');
+  document.getElementById('performanceMode').checked = true;
+}
+
+/* ===== UTILITY FUNCTIONS ===== */
+function setCookie(name, value, days) {
   const d = new Date();
-  d.setTime(d.getTime() + (days*24*60*60*1000));
-  document.cookie = name + "=" + value + ";expires=" + d.toUTCString() + ";path=/";
+  d.setTime(d.getTime() + (days * 24 * 60 * 60 * 1000));
+  document.cookie = `${name}=${encodeURIComponent(value)};expires=${d.toUTCString()};path=/`;
 }
 
-function getCookie(name){
-  const n = name + "=";
-  const ca = document.cookie.split(';');
-  for(let c of ca){
-    while(c.charAt(0) === ' ') c = c.substring(1);
-    if(c.indexOf(n) === 0) return c.substring(n.length, c.length);
+function getCookie(name) {
+  const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+  return match ? decodeURIComponent(match[2]) : null;
+}
+
+/* ===== GAME DATA ===== */
+const GAMES = [
+  {title: "Baseball Bros", description: "Baseball :)", image: "thumbnails/baseballbros.jpg", link: "games/baseballbros/index.html"},
+  {title: "Football Bros", description: "Football :)", image: "thumbnails/footballbros.jpg", link: "games/footballbros/index.html"},
+  {title: "Duck Clicker", description: "Ducks :)", image: "thumbnails/duckclicker.jpg", link: "games/duckclicker/index.html"},
+  {title: "Raft Wars 2", description: "RAFT WARS!", image: "thumbnails/raftwars2.jpg", link: "games/raftwars/index.html"},
+  {title: "The Impossiable Quiz", description: "Hard Quiz", image: "thumbnails/theimpossiablequiz.jpg", link: "games/theimpossiablequiz/index.html"},
+  {title: "Line Rider", description: "Line Rider", image: "thumbnails/linerider.jpg", link: "games/linerider/index.html"},
+  {title: "CSGO Clicker", description: "Click your way to victory in this CSGO-themed clicker game!", image: "thumbnails/csgo.png", link: "games/csgoclicker/index.html"},
+  {title: "Nut Simulator", description: "Collect nuts in this hilarious simulation game", image: "thumbnails/nut.png", link: "games/nut-simulator/index.html"},
+  {title: "Tiny Fishing", description: "Relaxing fishing game with cute graphics 🎣", image: "thumbnails/tiny-fishing.jpg", link: "games/tinyfishing/index.html"},
+  {title: "Cluster Rush", description: "Navigate through challenging obstacle courses", image: "thumbnails/clusterrush.jpg", link: "games/clusterrush/index.html"},
+  {title: "Bit Life", description: "Live a virtual life and make important decisions", image: "thumbnails/bitlife.jpg", link: "games/bitlife/index.html"},
+  {title: "Stack", description: "Stack blocks as high as you can without falling", image: "thumbnails/stack.jpg", link: "games/stack/game.html"},
+  {title: "Crossy Roads", description: "Help the chicken cross the road safely 🐔🚙", image: "thumbnails/crossyroads.jpg", link: "games/crossyroads/index.html"},
+  {title: "Poly Track", description: "🏎️", image: "thumbnails/pollytrack.jpg", link: "games/polytrack/index.html"},
+  {title: "House Of Hazards", description: "🏎️", image: "thumbnails/hoh.jpg", link: "games/hoh/index.html"},
+  {title: "Geometry Dash", description: "Rhythm-based action platformer", image: "thumbnails/geodash.jpg", link: "games/geometrydash/index.html"},
+  {title: "Retro Bowl COLLEGE", description: "🏈", image: "thumbnails/rrbc.jpg", link: "games/rrbc/index.html"},
+  {title: "OvO", description: "Platformer", image: "thumbnails/ovo.jpg", link: "games/ovo/index.html"},
+  {title: "Drift Hunters", description: "Realistic drifting simulation with tuning options", image: "thumbnails/drifthunters.jpg", link: "games/drifthunters/index.html"},
+  {title: "Paper.io", description: "Cool Game 👍", image: "thumbnails/paperio.jpg", link: "games/paperio/index.html"},
+  {title: "Basketball Legends 2020", description: "Epic basketball duels with special powers", image: "thumbnails/basketball1.jpg", link: "games/basketballlegends/index.html"},
+  {title: "Basketball Stars", description: "One-on-one basketball with slick moves", image: "thumbnails/basketball2.jpg", link: "games/basketballstars/index.html"},
+  {title: "Basketball Bros IO", description: "Multiplayer basketball madness", image: "thumbnails/basketball3.jpg", link: "games/basketbrosio/index.html"},
+  {title: "Cookie Clicker", description: "The classic clicker game - bake cookies!", image: "thumbnails/cookieclicker.jpg", link: "games/cookieclicker/index.html"},
+  {title: "Retro Bowl", description: "Classic football management game 🏈", image: "thumbnails/retrobowl.jpg", link: "games/retrobowl/index.html"},
+  {title: "Clicker Heroes", description: "Defeat monsters and upgrade your heroes", image: "thumbnails/clickerheros.jpg", link: "games/clickerheroes/index.html"},
+  {title: "PacMan", description: "The classic arcade maze chase game", image: "thumbnails/pacman.jpg", link: "games/pacman/index.html"},
+  {title: "Coming Soon", description: "More exciting games are on the way...", image: "thumbnails/comingsoon.png", link: "#"}
+];
+
+/* ===== LOADING SCREEN ===== */
+window.addEventListener('load', function() {
+  const loadingScreen = document.getElementById('loading-screen');
+  
+  // Simulate loading for better UX
+  setTimeout(() => {
+    loadingScreen.style.opacity = '0';
+    setTimeout(() => {
+      loadingScreen.style.display = 'none';
+      document.getElementById('update-popup').style.display = 'flex';
+      document.getElementById('currentYear').textContent = new Date().getFullYear();
+    }, 800);
+  }, 1500); // Reduced from 2000ms
+});
+
+/* ===== FAVORITES MANAGEMENT ===== */
+let favorites = JSON.parse(getCookie("favorites") || "[]");
+
+function toggleFavorite(gameTitle) {
+  const index = favorites.indexOf(gameTitle);
+  if (index === -1) {
+    favorites.push(gameTitle);
+    showNotification(`${gameTitle} added to favorites!`);
+  } else {
+    favorites.splice(index, 1);
+    showNotification(`${gameTitle} removed from favorites`);
   }
-  return null;
+  setCookie("favorites", JSON.stringify(favorites), 365);
+  renderGames(searchInput.value);
 }
 
-/* ---------- AUTO REDIRECT IF UNLOCKED BEFORE ---------- */
-if(getCookie("skip404") === "true"){
-  window.location.replace("index2.html");
+/* ===== NOTIFICATION SYSTEM ===== */
+function showNotification(message, type = "info") {
+  const existing = document.querySelector('.notification');
+  if (existing) existing.remove();
+  
+  const notification = document.createElement('div');
+  notification.className = `notification ${type}`;
+  notification.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : 'info-circle'}"></i> ${message}`;
+  
+  document.body.appendChild(notification);
+  
+  setTimeout(() => {
+    notification.style.transform = 'translateX(0)';
+  }, 10);
+  
+  setTimeout(() => {
+    notification.style.transform = 'translateX(150%)';
+    setTimeout(() => {
+      if (notification.parentNode) notification.parentNode.removeChild(notification);
+    }, 400);
+  }, 3000);
 }
 
-/* ---------- SECRET KEY COMBO (SHIFT + S) ---------- */
-document.addEventListener("keydown", e => {
-  if(e.shiftKey && e.key.toLowerCase() === "s"){
-    setCookie("skip404", "true", 30); // remember 30 days
-    window.location.replace("index2.html");
+/* ===== RENDER GAMES ===== */
+const container = document.getElementById('games-container');
+const totalGamesEl = document.getElementById('totalGames');
+const searchInput = document.getElementById('gameSearch');
+let searchTimeout;
+
+function renderGames(filter = "") {
+  container.innerHTML = "";
+  
+  const filteredGames = GAMES.filter(game => 
+    game.title.toLowerCase().includes(filter.toLowerCase()) || 
+    game.description.toLowerCase().includes(filter.toLowerCase())
+  );
+  
+  // Separate favorites
+  const favGames = filteredGames.filter(g => favorites.includes(g.title));
+  const normalGames = filteredGames.filter(g => !favorites.includes(g.title));
+  
+  // Render favorites section
+  if (favGames.length > 0) {
+    const favTitle = document.createElement('div');
+    favTitle.className = 'section-title';
+    favTitle.innerHTML = '<i class="fas fa-star"></i> Favorites';
+    container.appendChild(favTitle);
+    
+    favGames.forEach((game, index) => {
+      addGameCard(game, index, true);
+    });
+  }
+  
+  // Render all games section
+  if (normalGames.length > 0) {
+    const allTitle = document.createElement('div');
+    allTitle.className = 'section-title';
+    allTitle.innerHTML = '<i class="fas fa-gamepad"></i> All Games';
+    container.appendChild(allTitle);
+    
+    normalGames.forEach((game, index) => {
+      addGameCard(game, index + favGames.length, false);
+    });
+  }
+  
+  totalGamesEl.textContent = `Showing ${filteredGames.length} of ${GAMES.length} Games`;
+  
+  // Only add animations if enabled
+  if (document.getElementById('cardAnimations').checked) {
+    addScrollAnimations();
+  }
+}
+
+function addGameCard(game, index, isFavorite) {
+  const card = document.createElement('div');
+  card.className = `game-card ${isFavorite ? 'favorite' : ''}`;
+  
+  // Only use animation delay if animations are enabled
+  if (document.getElementById('cardAnimations').checked) {
+    card.style.animationDelay = `${index * 0.05}s`;
+  } else {
+    card.style.opacity = '1';
+    card.style.transform = 'none';
+  }
+  
+  card.innerHTML = `
+    <div class="card-image-container">
+      <img class="card-image" data-src="${game.image}" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='200'%3E%3C/svg%3E" alt="${game.title}" loading="lazy">
+      ${isFavorite ? '<div class="favorite-badge"><i class="fas fa-star"></i></div>' : ''}
+    </div>
+    <div class="card-content">
+      <div class="game-title">${game.title}</div>
+      <div class="game-description">${game.description}</div>
+      <button class="play-btn" data-game="${game.title}" data-link="${game.link}">
+        <i class="fas fa-play"></i> PLAY NOW
+      </button>
+    </div>
+  `;
+  
+  container.appendChild(card);
+  
+  // Lazy load image
+  const img = card.querySelector('img');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        img.src = img.dataset.src;
+        observer.unobserve(img);
+      }
+    });
+  });
+  observer.observe(img);
+  
+  const playBtn = card.querySelector('.play-btn');
+  playBtn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    openGameMenu(game);
+  });
+  
+  card.addEventListener('dblclick', function() {
+    toggleFavorite(game.title);
+  });
+}
+
+/* ===== SCROLL ANIMATIONS ===== */
+function addScrollAnimations() {
+  const cards = document.querySelectorAll('.game-card');
+  
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = '1';
+        entry.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, {
+    threshold: 0.1,
+    rootMargin: '0px 0px -50px 0px'
+  });
+  
+  cards.forEach(card => {
+    observer.observe(card);
+  });
+}
+
+// Initial render
+renderGames();
+
+// Debounced search
+searchInput.addEventListener('input', function(e) {
+  clearTimeout(searchTimeout);
+  searchTimeout = setTimeout(() => {
+    renderGames(e.target.value);
+  }, isLowPower ? 500 : 300); // Longer delay on low power devices
+});
+
+/* ===== GAME MENU ===== */
+const menu = document.getElementById('game-menu');
+const iframe = document.getElementById('game-frame');
+
+function openGameMenu(game) {
+  menu.style.display = 'flex';
+  iframe.src = game.link;
+  iframe.dataset.title = game.title;
+  document.body.style.overflow = 'hidden';
+}
+
+// Game menu button handlers
+document.getElementById('exit-btn').onclick = function() {
+  iframe.src = '';
+  menu.style.display = 'none';
+  document.body.style.overflow = 'auto';
+};
+
+document.getElementById('fullscreen-btn').onclick = function() {
+  if (iframe.requestFullscreen) {
+    iframe.requestFullscreen();
+  } else if (iframe.webkitRequestFullscreen) {
+    iframe.webkitRequestFullscreen();
+  } else if (iframe.msRequestFullscreen) {
+    iframe.msRequestFullscreen();
+  }
+};
+
+document.getElementById('fav-btn').onclick = function() {
+  const title = iframe.dataset.title;
+  if (title) {
+    toggleFavorite(title);
+  }
+};
+
+document.getElementById('newtab-btn').onclick = function() {
+  const newWin = window.open('about:blank', '_blank');
+  const spoofTitle = document.getElementById('spoofMode').value || iframe.dataset.title;
+  const spoofIcon = document.getElementById('spoofIcon').value || 'icons/logo.jpg';
+  
+  newWin.document.write(`
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <title>${spoofTitle}</title>
+      <link rel="icon" href="${spoofIcon}">
+      <style>
+        body {
+          margin: 0;
+          background: #000;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 100vh;
+          font-family: Arial, sans-serif;
+        }
+        iframe {
+          width: 100%;
+          height: 100%;
+          border: none;
+        }
+        .loading {
+          color: white;
+          font-size: 1.5rem;
+        }
+      </style>
+    </head>
+    <body>
+      <div class="loading">Loading ${spoofTitle}...</div>
+      <iframe src="${iframe.src}" onload="document.querySelector('.loading').style.display='none'"></iframe>
+    </body>
+    </html>
+  `);
+  newWin.document.close();
+};
+
+/* ===== SETTINGS MENU ===== */
+const settingsBtn = document.getElementById('settings-btn');
+const settingsMenu = document.getElementById('settings-menu');
+const closeSettings = document.getElementById('closeSettings');
+
+settingsBtn.onclick = function() {
+  settingsMenu.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+};
+
+closeSettings.onclick = function() {
+  settingsMenu.style.display = 'none';
+  document.body.style.overflow = 'auto';
+  showNotification('Settings saved!', 'success');
+  
+  // Apply performance mode if checked
+  if (document.getElementById('performanceMode').checked) {
+    document.body.classList.add('performance-mode');
+  } else {
+    document.body.classList.remove('performance-mode');
+  }
+};
+
+/* ===== TOS MODAL ===== */
+const tosBtn = document.getElementById('tos-btn');
+const tosModal = document.getElementById('tos-modal');
+const closeTos = document.getElementById('closeTos');
+
+tosBtn.onclick = function() {
+  tosModal.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+};
+
+closeTos.onclick = function() {
+  tosModal.style.display = 'none';
+  document.body.style.overflow = 'auto';
+};
+
+// Close modals when clicking outside
+window.onclick = function(event) {
+  if (event.target === settingsMenu) {
+    settingsMenu.style.display = 'none';
+    document.body.style.overflow = 'auto';
+  }
+  if (event.target === tosModal) {
+    tosModal.style.display = 'none';
+    document.body.style.overflow = 'auto';
+  }
+  if (event.target === menu) {
+    iframe.src = '';
+    menu.style.display = 'none';
+    document.body.style.overflow = 'auto';
+  }
+};
+
+/* ===== UPDATE POPUP ===== */
+document.getElementById('closePopup').onclick = function() {
+  document.getElementById('update-popup').style.display = 'none';
+};
+
+/* ===== SETTINGS MANAGEMENT ===== */
+const bgSelect = document.getElementById('bgSelect');
+const modeSelect = document.getElementById('modeSelect');
+const spoofInput = document.getElementById('spoofMode');
+const spoofIconInput = document.getElementById('spoofIcon');
+const favicon = document.getElementById('favicon');
+const smoothScrollCheck = document.getElementById('smoothScroll');
+const cardAnimationsCheck = document.getElementById('cardAnimations');
+const performanceModeCheck = document.getElementById('performanceMode');
+
+// Load settings from cookies
+function loadSettings() {
+  if (getCookie('bg')) bgSelect.value = getCookie('bg');
+  if (getCookie('mode')) modeSelect.value = getCookie('mode');
+  if (getCookie('spoofName')) spoofInput.value = getCookie('spoofName');
+  if (getCookie('spoofIcon')) spoofIconInput.value = getCookie('spoofIcon');
+  if (getCookie('smoothScroll')) smoothScrollCheck.checked = getCookie('smoothScroll') === 'true';
+  if (getCookie('cardAnimations')) cardAnimationsCheck.checked = getCookie('cardAnimations') === 'true';
+  if (getCookie('performanceMode') || isLowPower) {
+    performanceModeCheck.checked = true;
+    document.body.classList.add('performance-mode');
+  }
+  
+  applyBG(bgSelect.value);
+  applyMode(modeSelect.value);
+  applySpoof();
+  applySmoothScroll();
+}
+
+// Save settings when changed
+bgSelect.addEventListener('change', function() {
+  setCookie('bg', bgSelect.value, 365);
+  applyBG(bgSelect.value);
+});
+
+modeSelect.addEventListener('change', function() {
+  setCookie('mode', modeSelect.value, 365);
+  applyMode(modeSelect.value);
+});
+
+spoofInput.addEventListener('change', function() {
+  setCookie('spoofName', spoofInput.value, 365);
+  applySpoof();
+});
+
+spoofIconInput.addEventListener('change', function() {
+  setCookie('spoofIcon', spoofIconInput.value, 365);
+  applySpoof();
+});
+
+performanceModeCheck.addEventListener('change', function() {
+  setCookie('performanceMode', performanceModeCheck.checked, 365);
+  if (performanceModeCheck.checked) {
+    document.body.classList.add('performance-mode');
+  } else {
+    document.body.classList.remove('performance-mode');
   }
 });
-</script>
 
+smoothScrollCheck.addEventListener('change', function() {
+  setCookie('smoothScroll', smoothScrollCheck.checked, 365);
+  applySmoothScroll();
+});
+
+cardAnimationsCheck.addEventListener('change', function() {
+  setCookie('cardAnimations', cardAnimationsCheck.checked, 365);
+  if (!cardAnimationsCheck.checked) {
+    document.querySelectorAll('.game-card').forEach(card => {
+      card.style.animation = 'none';
+      card.style.opacity = '1';
+      card.style.transform = 'none';
+    });
+  }
+});
+
+// Apply settings functions
+function applyBG(val) {
+  const bg = document.getElementById('background');
+  const canvas = document.getElementById('particles-canvas');
+  const glow = document.getElementById('mouse-glow');
+  
+  // Skip if in performance mode
+  if (document.body.classList.contains('performance-mode')) {
+    bg.style.background = '#000';
+    bg.style.animation = 'none';
+    canvas.style.display = 'none';
+    glow.style.display = 'none';
+    return;
+  }
+  
+  switch(val) {
+    case 'blank':
+      bg.style.background = '#000';
+      bg.style.animation = 'none';
+      canvas.style.display = 'none';
+      glow.style.display = 'none';
+      break;
+    case 'dots':
+      bg.style.background = '#000';
+      bg.style.animation = 'none';
+      canvas.style.display = 'block';
+      glow.style.display = 'block';
+      updateParticles('dots');
+      break;
+    case 'stars':
+      bg.style.background = 'radial-gradient(ellipse at bottom, #1B2735 0%, #090A0F 100%)';
+      bg.style.animation = 'none';
+      canvas.style.display = 'block';
+      glow.style.display = 'none';
+      updateParticles('stars');
+      break;
+    default: // animated
+      bg.style.background = 'radial-gradient(circle at 20% 20%, #00ffff22, transparent 40%), radial-gradient(circle at 80% 30%, #8000ff22, transparent 45%), radial-gradient(circle at 50% 80%, #00ffff22, transparent 50%), linear-gradient(120deg, #050505, #000)';
+      bg.style.animation = 'hueShift 25s infinite alternate';
+      canvas.style.display = 'block';
+      glow.style.display = 'block';
+      updateParticles('default');
+  }
+}
+
+function applyMode(val) {
+  if (val === 'light') {
+    document.body.classList.add('light-mode');
+    document.documentElement.style.setProperty('--card-bg', 'rgba(255, 255, 255, 0.8)');
+    document.documentElement.style.setProperty('--text', '#000');
+  } else {
+    document.body.classList.remove('light-mode');
+    document.documentElement.style.setProperty('--card-bg', 'rgba(20, 20, 30, 0.7)');
+    document.documentElement.style.setProperty('--text', '#fff');
+  }
+}
+
+function applySpoof() {
+  document.title = spoofInput.value || 'Frosts Inc - Game Portal';
+  favicon.href = spoofIconInput.value || 'icons/logo.jpg';
+}
+
+function applySmoothScroll() {
+  if (smoothScrollCheck.checked) {
+    document.documentElement.style.scrollBehavior = 'smooth';
+  } else {
+    document.documentElement.style.scrollBehavior = 'auto';
+  }
+}
+
+/* ===== BACKGROUND MOVEMENT ===== */
+const bg = document.getElementById('background');
+const glow = document.getElementById('mouse-glow');
+
+// Only enable on non-low-power devices
+if (!isLowPower) {
+  document.addEventListener('mousemove', function(e) {
+    const moveX = (e.clientX / innerWidth - 0.5) * 30;
+    const moveY = (e.clientY / innerHeight - 0.5) * 30;
+    
+    bg.style.transform = `translate(${moveX}px, ${moveY}px)`;
+    glow.style.left = e.clientX + 'px';
+    glow.style.top = e.clientY + 'px';
+  });
+}
+
+/* ===== OPTIMIZED PARTICLES ===== */
+const canvas = document.getElementById('particles-canvas');
+const ctx = canvas.getContext('2d');
+let particles = [];
+let particleMode = 'default';
+let lastFrameTime = 0;
+
+function resizeCanvas() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+
+function initParticles(mode) {
+  particleMode = mode;
+  particles = [];
+  
+  // Reduced particle counts for performance
+  let count = isLowPower ? 40 : 100;
+  if (mode === 'dots') count = isLowPower ? 60 : 200;
+  if (mode === 'stars') count = isLowPower ? 80 : 300;
+  
+  for (let i = 0; i < count; i++) {
+    particles.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      vx: (Math.random() - 0.5) * (mode === 'stars' ? 0.1 : 0.2),
+      vy: (Math.random() - 0.5) * (mode === 'stars' ? 0.1 : 0.2),
+      r: Math.random() * (isLowPower ? 1.5 : 2) + 0.5,
+      color: mode === 'stars' ? 
+        `rgba(255, 255, 255, ${Math.random() * 0.5 + 0.1})` :
+        `rgba(136, 192, 224, ${Math.random() * 0.3 + 0.1})`,
+      glow: mode === 'stars' && !isLowPower
+    });
+  }
+}
+
+function updateParticles(mode) {
+  initParticles(mode);
+}
+
+function animateParticles(timestamp) {
+  // Throttle frame rate on low power devices
+  if (timestamp - lastFrameTime > (isLowPower ? 32 : 16)) { // 30fps or 60fps
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    particles.forEach(p => {
+      p.x += p.vx;
+      p.y += p.vy;
+      
+      if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+      if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+      
+      if (p.glow && !isLowPower) {
+        const gradient = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 2);
+        gradient.addColorStop(0, p.color);
+        gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+        ctx.fillStyle = gradient;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r * 2, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      
+      ctx.fillStyle = p.color;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fill();
+      
+      // Skip line connections on low performance
+      if (!isLowPower && (particleMode === 'dots' || particleMode === 'default')) {
+        particles.forEach(other => {
+          const dx = p.x - other.x;
+          const dy = p.y - other.y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+          
+          if (distance < 100) {
+            ctx.strokeStyle = `rgba(136, 192, 224, ${0.2 * (1 - distance/100)})`;
+            ctx.lineWidth = 0.5;
+            ctx.beginPath();
+            ctx.moveTo(p.x, p.y);
+            ctx.lineTo(other.x, other.y);
+            ctx.stroke();
+          }
+        });
+      }
+    });
+    
+    lastFrameTime = timestamp;
+  }
+  
+  requestAnimationFrame(animateParticles);
+}
+
+// Initialize particles
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
+initParticles('default');
+animateParticles();
+
+/* ===== KEYBOARD SHORTCUTS ===== */
+document.addEventListener('keydown', function(e) {
+  // Escape key closes modals
+  if (e.key === 'Escape') {
+    if (menu.style.display === 'flex') {
+      iframe.src = '';
+      menu.style.display = 'none';
+      document.body.style.overflow = 'auto';
+    }
+    if (settingsMenu.style.display === 'flex') {
+      settingsMenu.style.display = 'none';
+      document.body.style.overflow = 'auto';
+    }
+    if (tosModal.style.display === 'flex') {
+      tosModal.style.display = 'none';
+      document.body.style.overflow = 'auto';
+    }
+  }
+  
+  // Ctrl+F to focus search
+  if (e.ctrlKey && e.key === 'f') {
+    e.preventDefault();
+    searchInput.focus();
+  }
+  
+  // Ctrl+S to open settings
+  if (e.ctrlKey && e.key === 's') {
+    e.preventDefault();
+    settingsMenu.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+  }
+});
+
+/* ===== INITIALIZE ===== */
+loadSettings();
+</script>
 </body>
 </html>
