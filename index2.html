@@ -737,7 +737,34 @@ footer a {
   text-decoration: none;
 }
 
-/* ===== RESPONSIVE ===== */
+/* ===== RESPONSIVE & PERFORMANCE OPTIMIZATIONS ===== */
+@media (max-width: 1024px), (hover: none), (pointer: coarse) {
+  /* Reduce animations on mobile/Chromebook */
+  .game-card:hover {
+    transform: translateY(-5px) scale(1.01);
+  }
+  
+  #background {
+    animation-duration: 60s;
+  }
+  
+  .game-card {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+  
+  .btn:hover, .menu-btn:hover {
+    transform: translateY(-2px);
+  }
+  
+  /* Reduce particle effects */
+  #mouse-glow {
+    animation: none;
+    opacity: 0.1;
+  }
+}
+
 @media (max-width: 768px) {
   .title {
     font-size: 2.5rem;
@@ -769,6 +796,31 @@ footer a {
   }
 }
 
+/* Performance mode styles */
+body.performance-mode {
+  --transition: all 0.2s ease;
+}
+
+body.performance-mode #background {
+  animation: none;
+  background: #000;
+}
+
+body.performance-mode .game-card {
+  animation: none;
+  opacity: 1;
+  transform: none;
+}
+
+body.performance-mode .game-card:hover {
+  transform: translateY(-5px);
+}
+
+body.performance-mode #mouse-glow,
+body.performance-mode #particles-canvas {
+  display: none !important;
+}
+
 /* ===== SCROLLBAR ===== */
 ::-webkit-scrollbar {
   width: 10px;
@@ -786,9 +838,48 @@ footer a {
 ::-webkit-scrollbar-thumb:hover {
   background: var(--secondary);
 }
+
+/* ===== NOTIFICATION ===== */
+.notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: rgba(20, 30, 40, 0.9);
+  color: white;
+  padding: 15px 25px;
+  border-radius: 10px;
+  backdrop-filter: blur(10px);
+  z-index: 10002;
+  border-left: 4px solid #00ff00;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transform: translateX(150%);
+  transition: transform 0.4s ease;
+}
+
+.notification.info {
+  border-left-color: #00ffff;
+}
 </style>
 </head>
 <body>
+
+<!-- COOKIE CHECK MODAL -->
+<div id="cookie-check-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.95); z-index:10003; display:flex; justify-content:center; align-items:center;">
+  <div style="background:rgba(30,30,30,0.95); padding:40px; border-radius:16px; max-width:500px; text-align:center; border:1px solid var(--accent);">
+    <h2 style="color:var(--accent); margin-bottom:20px; font-family:'Orbitron', sans-serif;">
+      <i class="fas fa-exclamation-triangle"></i> Access Denied
+    </h2>
+    <p style="margin-bottom:20px; line-height:1.6;">
+      You must access this page through the main portal.<br>
+      Please return to the homepage. This Site is Down!
+    </p>
+    <button onclick="window.location.href='index.html'" style="padding:12px 30px; border-radius:50px; background:var(--accent); color:white; border:none; cursor:pointer; font-weight:600;">
+      Return to Homepage
+    </button>
+  </div>
+</div>
 
 <div id="background"></div>
 <div id="mouse-glow"></div>
@@ -925,6 +1016,11 @@ footer a {
     </div>
 
     <div class="checkbox-group">
+      <input type="checkbox" id="performanceMode">
+      <label for="performanceMode">Performance Mode (reduces effects)</label>
+    </div>
+
+    <div class="checkbox-group">
       <input type="checkbox" id="smoothScroll">
       <label for="smoothScroll">Enable smooth scrolling</label>
     </div>
@@ -939,6 +1035,38 @@ footer a {
 </div>
 
 <script>
+/* ===== COOKIE CHECK ===== */
+// Check if user has bypassed 404 page
+function getCookie(name) {
+  const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+  return match ? decodeURIComponent(match[2]) : null;
+}
+
+// Redirect if not unlocked
+if (getCookie("skip404") !== "true") {
+  document.getElementById('cookie-check-modal').style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+}
+
+/* ===== PERFORMANCE DETECTION ===== */
+const isChromebook = /chrome os/i.test(navigator.userAgent);
+const isMobile = /mobile|android|webos|iphone|ipad|ipod/i.test(navigator.userAgent);
+const isLowPower = isChromebook || isMobile || window.innerWidth < 1024;
+
+// Set performance mode automatically for low-power devices
+if (isLowPower) {
+  console.log('Low power device detected - enabling performance mode');
+  document.body.classList.add('performance-mode');
+  document.getElementById('performanceMode').checked = true;
+}
+
+/* ===== UTILITY FUNCTIONS ===== */
+function setCookie(name, value, days) {
+  const d = new Date();
+  d.setTime(d.getTime() + (days * 24 * 60 * 60 * 1000));
+  document.cookie = `${name}=${encodeURIComponent(value)};expires=${d.toUTCString()};path=/`;
+}
+
 /* ===== GAME DATA ===== */
 const GAMES = [
   {title: "Baseball Bros", description: "Baseball :)", image: "thumbnails/baseballbros.jpg", link: "games/baseballbros/index.html"},
@@ -971,20 +1099,11 @@ const GAMES = [
   {title: "Coming Soon", description: "More exciting games are on the way...", image: "thumbnails/comingsoon.png", link: "#"}
 ];
 
-/* ===== UTILITY FUNCTIONS ===== */
-function setCookie(name, value, days) {
-  const d = new Date();
-  d.setTime(d.getTime() + (days * 24 * 60 * 60 * 1000));
-  document.cookie = `${name}=${encodeURIComponent(value)};expires=${d.toUTCString()};path=/`;
-}
-
-function getCookie(name) {
-  const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
-  return match ? decodeURIComponent(match[2]) : null;
-}
-
 /* ===== LOADING SCREEN ===== */
 window.addEventListener('load', function() {
+  // Skip if cookie check failed
+  if (getCookie("skip404") !== "true") return;
+  
   const loadingScreen = document.getElementById('loading-screen');
   
   // Simulate loading for better UX
@@ -995,7 +1114,7 @@ window.addEventListener('load', function() {
       document.getElementById('update-popup').style.display = 'flex';
       document.getElementById('currentYear').textContent = new Date().getFullYear();
     }, 800);
-  }, 2000);
+  }, 1500); // Reduced from 2000ms
 });
 
 /* ===== FAVORITES MANAGEMENT ===== */
@@ -1016,7 +1135,6 @@ function toggleFavorite(gameTitle) {
 
 /* ===== NOTIFICATION SYSTEM ===== */
 function showNotification(message, type = "info") {
-  // Remove existing notification
   const existing = document.querySelector('.notification');
   if (existing) existing.remove();
   
@@ -1024,33 +1142,12 @@ function showNotification(message, type = "info") {
   notification.className = `notification ${type}`;
   notification.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : 'info-circle'}"></i> ${message}`;
   
-  // Add styles
-  notification.style.cssText = `
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    background: rgba(20, 30, 40, 0.9);
-    color: white;
-    padding: 15px 25px;
-    border-radius: 10px;
-    backdrop-filter: blur(10px);
-    z-index: 10002;
-    border-left: 4px solid ${type === 'success' ? '#00ff00' : '#00ffff'};
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    transform: translateX(150%);
-    transition: transform 0.4s ease;
-  `;
-  
   document.body.appendChild(notification);
   
-  // Animate in
   setTimeout(() => {
     notification.style.transform = 'translateX(0)';
   }, 10);
   
-  // Remove after 3 seconds
   setTimeout(() => {
     notification.style.transform = 'translateX(150%)';
     setTimeout(() => {
@@ -1063,11 +1160,11 @@ function showNotification(message, type = "info") {
 const container = document.getElementById('games-container');
 const totalGamesEl = document.getElementById('totalGames');
 const searchInput = document.getElementById('gameSearch');
+let searchTimeout;
 
 function renderGames(filter = "") {
   container.innerHTML = "";
   
-  // Filter games based on search
   const filteredGames = GAMES.filter(game => 
     game.title.toLowerCase().includes(filter.toLowerCase()) || 
     game.description.toLowerCase().includes(filter.toLowerCase())
@@ -1077,7 +1174,7 @@ function renderGames(filter = "") {
   const favGames = filteredGames.filter(g => favorites.includes(g.title));
   const normalGames = filteredGames.filter(g => !favorites.includes(g.title));
   
-  // Render favorites section if there are any
+  // Render favorites section
   if (favGames.length > 0) {
     const favTitle = document.createElement('div');
     favTitle.className = 'section-title';
@@ -1101,21 +1198,29 @@ function renderGames(filter = "") {
     });
   }
   
-  // Update total games counter
   totalGamesEl.textContent = `Showing ${filteredGames.length} of ${GAMES.length} Games`;
   
-  // Add scroll animations
-  addScrollAnimations();
+  // Only add animations if enabled
+  if (document.getElementById('cardAnimations').checked) {
+    addScrollAnimations();
+  }
 }
 
 function addGameCard(game, index, isFavorite) {
   const card = document.createElement('div');
   card.className = `game-card ${isFavorite ? 'favorite' : ''}`;
-  card.style.animationDelay = `${index * 0.05}s`;
+  
+  // Only use animation delay if animations are enabled
+  if (document.getElementById('cardAnimations').checked) {
+    card.style.animationDelay = `${index * 0.05}s`;
+  } else {
+    card.style.opacity = '1';
+    card.style.transform = 'none';
+  }
   
   card.innerHTML = `
     <div class="card-image-container">
-      <img class="card-image" src="${game.image}" alt="${game.title}" onerror="this.src='thumbnails/comingsoon.png'">
+      <img class="card-image" data-src="${game.image}" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='200'%3E%3C/svg%3E" alt="${game.title}" loading="lazy">
       ${isFavorite ? '<div class="favorite-badge"><i class="fas fa-star"></i></div>' : ''}
     </div>
     <div class="card-content">
@@ -1129,14 +1234,24 @@ function addGameCard(game, index, isFavorite) {
   
   container.appendChild(card);
   
-  // Add click event to the play button
+  // Lazy load image
+  const img = card.querySelector('img');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        img.src = img.dataset.src;
+        observer.unobserve(img);
+      }
+    });
+  });
+  observer.observe(img);
+  
   const playBtn = card.querySelector('.play-btn');
   playBtn.addEventListener('click', function(e) {
     e.stopPropagation();
     openGameMenu(game);
   });
   
-  // Add double click to toggle favorite
   card.addEventListener('dblclick', function() {
     toggleFavorite(game.title);
   });
@@ -1163,12 +1278,17 @@ function addScrollAnimations() {
   });
 }
 
-// Initial render
-renderGames();
+// Initial render (only if cookie check passed)
+if (getCookie("skip404") === "true") {
+  renderGames();
+}
 
-// Search functionality
+// Debounced search
 searchInput.addEventListener('input', function(e) {
-  renderGames(e.target.value);
+  clearTimeout(searchTimeout);
+  searchTimeout = setTimeout(() => {
+    renderGames(e.target.value);
+  }, isLowPower ? 500 : 300); // Longer delay on low power devices
 });
 
 /* ===== GAME MENU ===== */
@@ -1261,6 +1381,13 @@ closeSettings.onclick = function() {
   settingsMenu.style.display = 'none';
   document.body.style.overflow = 'auto';
   showNotification('Settings saved!', 'success');
+  
+  // Apply performance mode if checked
+  if (document.getElementById('performanceMode').checked) {
+    document.body.classList.add('performance-mode');
+  } else {
+    document.body.classList.remove('performance-mode');
+  }
 };
 
 /* ===== TOS MODAL ===== */
@@ -1308,6 +1435,7 @@ const spoofIconInput = document.getElementById('spoofIcon');
 const favicon = document.getElementById('favicon');
 const smoothScrollCheck = document.getElementById('smoothScroll');
 const cardAnimationsCheck = document.getElementById('cardAnimations');
+const performanceModeCheck = document.getElementById('performanceMode');
 
 // Load settings from cookies
 function loadSettings() {
@@ -1317,6 +1445,10 @@ function loadSettings() {
   if (getCookie('spoofIcon')) spoofIconInput.value = getCookie('spoofIcon');
   if (getCookie('smoothScroll')) smoothScrollCheck.checked = getCookie('smoothScroll') === 'true';
   if (getCookie('cardAnimations')) cardAnimationsCheck.checked = getCookie('cardAnimations') === 'true';
+  if (getCookie('performanceMode') || isLowPower) {
+    performanceModeCheck.checked = true;
+    document.body.classList.add('performance-mode');
+  }
   
   applyBG(bgSelect.value);
   applyMode(modeSelect.value);
@@ -1345,6 +1477,15 @@ spoofIconInput.addEventListener('change', function() {
   applySpoof();
 });
 
+performanceModeCheck.addEventListener('change', function() {
+  setCookie('performanceMode', performanceModeCheck.checked, 365);
+  if (performanceModeCheck.checked) {
+    document.body.classList.add('performance-mode');
+  } else {
+    document.body.classList.remove('performance-mode');
+  }
+});
+
 smoothScrollCheck.addEventListener('change', function() {
   setCookie('smoothScroll', smoothScrollCheck.checked, 365);
   applySmoothScroll();
@@ -1352,6 +1493,13 @@ smoothScrollCheck.addEventListener('change', function() {
 
 cardAnimationsCheck.addEventListener('change', function() {
   setCookie('cardAnimations', cardAnimationsCheck.checked, 365);
+  if (!cardAnimationsCheck.checked) {
+    document.querySelectorAll('.game-card').forEach(card => {
+      card.style.animation = 'none';
+      card.style.opacity = '1';
+      card.style.transform = 'none';
+    });
+  }
 });
 
 // Apply settings functions
@@ -1359,6 +1507,15 @@ function applyBG(val) {
   const bg = document.getElementById('background');
   const canvas = document.getElementById('particles-canvas');
   const glow = document.getElementById('mouse-glow');
+  
+  // Skip if in performance mode
+  if (document.body.classList.contains('performance-mode')) {
+    bg.style.background = '#000';
+    bg.style.animation = 'none';
+    canvas.style.display = 'none';
+    glow.style.display = 'none';
+    return;
+  }
   
   switch(val) {
     case 'blank':
@@ -1419,20 +1576,24 @@ function applySmoothScroll() {
 const bg = document.getElementById('background');
 const glow = document.getElementById('mouse-glow');
 
-document.addEventListener('mousemove', function(e) {
-  const moveX = (e.clientX / innerWidth - 0.5) * 30;
-  const moveY = (e.clientY / innerHeight - 0.5) * 30;
-  
-  bg.style.transform = `translate(${moveX}px, ${moveY}px)`;
-  glow.style.left = e.clientX + 'px';
-  glow.style.top = e.clientY + 'px';
-});
+// Only enable on non-low-power devices
+if (!isLowPower) {
+  document.addEventListener('mousemove', function(e) {
+    const moveX = (e.clientX / innerWidth - 0.5) * 30;
+    const moveY = (e.clientY / innerHeight - 0.5) * 30;
+    
+    bg.style.transform = `translate(${moveX}px, ${moveY}px)`;
+    glow.style.left = e.clientX + 'px';
+    glow.style.top = e.clientY + 'px';
+  });
+}
 
-/* ===== ENHANCED PARTICLES ===== */
+/* ===== OPTIMIZED PARTICLES ===== */
 const canvas = document.getElementById('particles-canvas');
 const ctx = canvas.getContext('2d');
 let particles = [];
 let particleMode = 'default';
+let lastFrameTime = 0;
 
 function resizeCanvas() {
   canvas.width = window.innerWidth;
@@ -1443,21 +1604,22 @@ function initParticles(mode) {
   particleMode = mode;
   particles = [];
   
-  let count = 100;
-  if (mode === 'dots') count = 200;
-  if (mode === 'stars') count = 300;
+  // Reduced particle counts for performance
+  let count = isLowPower ? 40 : 100;
+  if (mode === 'dots') count = isLowPower ? 60 : 200;
+  if (mode === 'stars') count = isLowPower ? 80 : 300;
   
   for (let i = 0; i < count; i++) {
     particles.push({
       x: Math.random() * canvas.width,
       y: Math.random() * canvas.height,
-      vx: (Math.random() - 0.5) * (mode === 'stars' ? 0.2 : 0.4),
-      vy: (Math.random() - 0.5) * (mode === 'stars' ? 0.2 : 0.4),
-      r: Math.random() * (mode === 'stars' ? 3 : 2) + 1,
+      vx: (Math.random() - 0.5) * (mode === 'stars' ? 0.1 : 0.2),
+      vy: (Math.random() - 0.5) * (mode === 'stars' ? 0.1 : 0.2),
+      r: Math.random() * (isLowPower ? 1.5 : 2) + 0.5,
       color: mode === 'stars' ? 
-        `rgba(255, 255, 255, ${Math.random() * 0.8 + 0.2})` :
-        `rgba(136, 192, 224, ${Math.random() * 0.5 + 0.1})`,
-      glow: mode === 'stars'
+        `rgba(255, 255, 255, ${Math.random() * 0.5 + 0.1})` :
+        `rgba(136, 192, 224, ${Math.random() * 0.3 + 0.1})`,
+      glow: mode === 'stars' && !isLowPower
     });
   }
 }
@@ -1466,63 +1628,65 @@ function updateParticles(mode) {
   initParticles(mode);
 }
 
-function animateParticles() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  
-  particles.forEach(p => {
-    // Update position
-    p.x += p.vx;
-    p.y += p.vy;
+function animateParticles(timestamp) {
+  // Throttle frame rate on low power devices
+  if (timestamp - lastFrameTime > (isLowPower ? 32 : 16)) { // 30fps or 60fps
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
     
-    // Bounce off walls
-    if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
-    if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
-    
-    // Draw particle
-    if (p.glow) {
-      // Star with glow
-      const gradient = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 2);
-      gradient.addColorStop(0, p.color);
-      gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+    particles.forEach(p => {
+      p.x += p.vx;
+      p.y += p.vy;
       
-      ctx.fillStyle = gradient;
+      if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+      if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+      
+      if (p.glow && !isLowPower) {
+        const gradient = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 2);
+        gradient.addColorStop(0, p.color);
+        gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+        ctx.fillStyle = gradient;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r * 2, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      
+      ctx.fillStyle = p.color;
       ctx.beginPath();
-      ctx.arc(p.x, p.y, p.r * 2, 0, Math.PI * 2);
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
       ctx.fill();
-    }
+      
+      // Skip line connections on low performance
+      if (!isLowPower && (particleMode === 'dots' || particleMode === 'default')) {
+        particles.forEach(other => {
+          const dx = p.x - other.x;
+          const dy = p.y - other.y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+          
+          if (distance < 100) {
+            ctx.strokeStyle = `rgba(136, 192, 224, ${0.2 * (1 - distance/100)})`;
+            ctx.lineWidth = 0.5;
+            ctx.beginPath();
+            ctx.moveTo(p.x, p.y);
+            ctx.lineTo(other.x, other.y);
+            ctx.stroke();
+          }
+        });
+      }
+    });
     
-    ctx.fillStyle = p.color;
-    ctx.beginPath();
-    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-    ctx.fill();
-    
-    // Connect particles with lines
-    if (particleMode === 'dots' || particleMode === 'default') {
-      particles.forEach(other => {
-        const dx = p.x - other.x;
-        const dy = p.y - other.y;
-        const distance = Math.sqrt(dx * dx + dy * dy);
-        
-        if (distance < 100) {
-          ctx.strokeStyle = `rgba(136, 192, 224, ${0.2 * (1 - distance/100)})`;
-          ctx.lineWidth = 0.5;
-          ctx.beginPath();
-          ctx.moveTo(p.x, p.y);
-          ctx.lineTo(other.x, other.y);
-          ctx.stroke();
-        }
-      });
-    }
-  });
+    lastFrameTime = timestamp;
+  }
   
   requestAnimationFrame(animateParticles);
 }
 
 // Initialize particles
-window.addEventListener('resize', resizeCanvas);
-resizeCanvas();
-initParticles('default');
-animateParticles();
+if (getCookie("skip404") === "true") {
+  window.addEventListener('resize', resizeCanvas);
+  resizeCanvas();
+  initParticles('default');
+  animateParticles();
+}
 
 /* ===== KEYBOARD SHORTCUTS ===== */
 document.addEventListener('keydown', function(e) {
@@ -1558,7 +1722,10 @@ document.addEventListener('keydown', function(e) {
 });
 
 /* ===== INITIALIZE ===== */
-loadSettings();
+// Only initialize if cookie check passed
+if (getCookie("skip404") === "true") {
+  loadSettings();
+}
 </script>
 </body>
 </html>
