@@ -34,6 +34,64 @@ body {
   overflow-x: hidden;
   transition: background 0.5s, color 0.5s;
   min-height: 100vh;
+  display: flex;
+}
+
+/* ===== SIDEBAR LAYOUT ===== */
+.main-container {
+  display: flex;
+  width: 100%;
+  max-width: 1800px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.content-wrapper {
+  flex: 1;
+  min-width: 0; /* Prevents flex items from overflowing */
+}
+
+/* ===== SIDEBAR AD ===== */
+.sidebar-ad {
+  width: 160px; /* Standard vertical ad width */
+  padding: 20px 10px;
+  position: sticky;
+  top: 20px;
+  height: fit-content;
+  max-height: calc(100vh - 40px);
+  overflow: hidden;
+}
+
+/* Right sidebar */
+.sidebar-ad.right {
+  margin-left: 20px;
+  order: 2;
+}
+
+/* Left sidebar */
+.sidebar-ad.left {
+  margin-right: 20px;
+  order: 0;
+}
+
+/* Center content */
+.content-wrapper {
+  order: 1;
+}
+
+/* Hide sidebar on mobile */
+@media (max-width: 1200px) {
+  .sidebar-ad {
+    display: none;
+  }
+  
+  .main-container {
+    flex-direction: column;
+  }
+  
+  .content-wrapper {
+    width: 100%;
+  }
 }
 
 /* ===== BACKGROUNDS ===== */
@@ -929,37 +987,71 @@ body.performance-mode #particles-canvas {
   </div>
 </div>
 
-<div class="header-container">
-  <div class="title">FROSTS INC</div>
-  <div class="header-buttons">
-    <button class="btn discord-btn" onclick="window.open('https://discord.gg/mCUHppWjv7')">
-      <i class="fab fa-discord"></i> Join Discord
-    </button>
-    <button class="btn settings-btn" id="settings-btn">
-      <i class="fas fa-cog"></i> Settings
-    </button>
-    <button class="btn tos-btn" id="tos-btn">
-      <i class="fas fa-file-contract"></i> Terms of Service
-    </button>
+<!-- MAIN CONTAINER WITH SIDEBARS -->
+<div class="main-container">
+  <!-- Left Sidebar Ad -->
+  <div class="sidebar-ad left">
+    <!-- Vertical Ad -->
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-3294172390463223"
+         data-ad-slot="8181509164"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>
+         (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+  </div>
+
+  <!-- Main Content -->
+  <div class="content-wrapper">
+    <div class="header-container">
+      <div class="title">FROSTS INC</div>
+      <div class="header-buttons">
+        <button class="btn discord-btn" onclick="window.open('https://discord.gg/mCUHppWjv7')">
+          <i class="fab fa-discord"></i> Join Discord
+        </button>
+        <button class="btn settings-btn" id="settings-btn">
+          <i class="fas fa-cog"></i> Settings
+        </button>
+        <button class="btn tos-btn" id="tos-btn">
+          <i class="fas fa-file-contract"></i> Terms of Service
+        </button>
+      </div>
+    </div>
+
+    <div class="games-header">
+      <div class="search-container">
+        <i class="fas fa-search"></i>
+        <input type="text" id="gameSearch" placeholder="Search games...">
+      </div>
+      <div id="totalGames"></div>
+    </div>
+
+    <div class="games-container" id="games-container">
+      <!-- Games will be dynamically inserted here -->
+    </div>
+
+    <footer>
+      <p>Frosts Inc Game Portal &copy; <span id="currentYear"></span> | For entertainment purposes only</p>
+      <p><i class="fas fa-exclamation-triangle"></i> Remember: Games should not interfere with educational activities</p>
+    </footer>
+  </div>
+
+  <!-- Right Sidebar Ad -->
+  <div class="sidebar-ad right">
+    <!-- Vertical Ad -->
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-3294172390463223"
+         data-ad-slot="8181509164"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>
+         (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
   </div>
 </div>
-
-<div class="games-header">
-  <div class="search-container">
-    <i class="fas fa-search"></i>
-    <input type="text" id="gameSearch" placeholder="Search games...">
-  </div>
-  <div id="totalGames"></div>
-</div>
-
-<div class="games-container" id="games-container">
-  <!-- Games will be dynamically inserted here -->
-</div>
-
-<footer>
-  <p>Frosts Inc Game Portal &copy; <span id="currentYear"></span> | For entertainment purposes only</p>
-  <p><i class="fas fa-exclamation-triangle"></i> Remember: Games should not interfere with educational activities</p>
-</footer>
 
 <div id="game-menu">
   <iframe id="game-frame" title="Game Frame"></iframe>
