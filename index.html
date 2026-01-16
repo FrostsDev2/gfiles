@@ -34,64 +34,6 @@ body {
   overflow-x: hidden;
   transition: background 0.5s, color 0.5s;
   min-height: 100vh;
-  display: flex;
-}
-
-/* ===== SIDEBAR LAYOUT ===== */
-.main-container {
-  display: flex;
-  width: 100%;
-  max-width: 1800px;
-  margin: 0 auto;
-  position: relative;
-}
-
-.content-wrapper {
-  flex: 1;
-  min-width: 0; /* Prevents flex items from overflowing */
-}
-
-/* ===== SIDEBAR AD ===== */
-.sidebar-ad {
-  width: 160px; /* Standard vertical ad width */
-  padding: 20px 10px;
-  position: sticky;
-  top: 20px;
-  height: fit-content;
-  max-height: calc(100vh - 40px);
-  overflow: hidden;
-}
-
-/* Right sidebar */
-.sidebar-ad.right {
-  margin-left: 20px;
-  order: 2;
-}
-
-/* Left sidebar */
-.sidebar-ad.left {
-  margin-right: 20px;
-  order: 0;
-}
-
-/* Center content */
-.content-wrapper {
-  order: 1;
-}
-
-/* Hide sidebar on mobile */
-@media (max-width: 1200px) {
-  .sidebar-ad {
-    display: none;
-  }
-  
-  .main-container {
-    flex-direction: column;
-  }
-  
-  .content-wrapper {
-    width: 100%;
-  }
 }
 
 /* ===== BACKGROUNDS ===== */
@@ -662,6 +604,71 @@ body {
 #newtab-btn { background:#ffaa00; color:#000; }
 #exit-btn { background:var(--accent); color:#fff; }
 
+/* ===== SIDEBAR ADS ===== */
+.sidebar-ads-container {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  width: 160px;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  pointer-events: none;
+}
+
+.sidebar-ads-container.left {
+  left: 10px;
+}
+
+.sidebar-ads-container.right {
+  right: 10px;
+}
+
+.sidebar-ad {
+  pointer-events: auto;
+  margin: 10px 0;
+  max-width: 160px;
+  width: 100%;
+}
+
+/* ===== BOTTOM ADS ===== */
+.bottom-ad-container {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+  background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(5px);
+  pointer-events: none;
+}
+
+.bottom-ad {
+  pointer-events: auto;
+  max-width: 728px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* Hide ads on mobile to avoid crowding */
+@media (max-width: 768px) {
+  .sidebar-ads-container {
+    display: none;
+  }
+  
+  .bottom-ad-container {
+    position: relative;
+    margin-top: 20px;
+    background: transparent;
+    backdrop-filter: none;
+  }
+}
+
 /* ===== SETTINGS MENU ===== */
 #settings-menu {
   display:none;
@@ -925,6 +932,53 @@ body.performance-mode #particles-canvas {
 </head>
 <body>
 
+<!-- SIDEBAR ADS -->
+<div class="sidebar-ads-container left">
+  <!-- Left Sidebar Vertical Ad -->
+  <div class="sidebar-ad">
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-3294172390463223"
+         data-ad-slot="8181509164"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>
+         (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+  </div>
+</div>
+
+<div class="sidebar-ads-container right">
+  <!-- Right Sidebar Vertical Ad -->
+  <div class="sidebar-ad">
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-3294172390463223"
+         data-ad-slot="8181509164"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>
+         (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+  </div>
+</div>
+
+<!-- BOTTOM AD -->
+<div class="bottom-ad-container">
+  <!-- Bottom Horizontal Ad -->
+  <div class="bottom-ad">
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-3294172390463223"
+         data-ad-slot="3879302076"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>
+         (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+  </div>
+</div>
+
 <!-- COOKIE CHECK MODAL REMOVED -->
 
 <div id="background"></div>
@@ -987,79 +1041,75 @@ body.performance-mode #particles-canvas {
   </div>
 </div>
 
-<!-- MAIN CONTAINER WITH SIDEBARS -->
-<div class="main-container">
-  <!-- Left Sidebar Ad -->
-  <div class="sidebar-ad left">
-    <!-- Vertical Ad -->
-    <ins class="adsbygoogle"
-         style="display:block"
-         data-ad-client="ca-pub-3294172390463223"
-         data-ad-slot="8181509164"
-         data-ad-format="auto"
-         data-full-width-responsive="true"></ins>
-    <script>
-         (adsbygoogle = window.adsbygoogle || []).push({});
-    </script>
-  </div>
-
-  <!-- Main Content -->
-  <div class="content-wrapper">
-    <div class="header-container">
-      <div class="title">FROSTS INC</div>
-      <div class="header-buttons">
-        <button class="btn discord-btn" onclick="window.open('https://discord.gg/mCUHppWjv7')">
-          <i class="fab fa-discord"></i> Join Discord
-        </button>
-        <button class="btn settings-btn" id="settings-btn">
-          <i class="fas fa-cog"></i> Settings
-        </button>
-        <button class="btn tos-btn" id="tos-btn">
-          <i class="fas fa-file-contract"></i> Terms of Service
-        </button>
-      </div>
-    </div>
-
-    <div class="games-header">
-      <div class="search-container">
-        <i class="fas fa-search"></i>
-        <input type="text" id="gameSearch" placeholder="Search games...">
-      </div>
-      <div id="totalGames"></div>
-    </div>
-
-    <div class="games-container" id="games-container">
-      <!-- Games will be dynamically inserted here -->
-    </div>
-
-    <footer>
-      <p>Frosts Inc Game Portal &copy; <span id="currentYear"></span> | For entertainment purposes only</p>
-      <p><i class="fas fa-exclamation-triangle"></i> Remember: Games should not interfere with educational activities</p>
-    </footer>
-  </div>
-
-  <!-- Right Sidebar Ad -->
-  <div class="sidebar-ad right">
-    <!-- Vertical Ad -->
-    <ins class="adsbygoogle"
-         style="display:block"
-         data-ad-client="ca-pub-3294172390463223"
-         data-ad-slot="8181509164"
-         data-ad-format="auto"
-         data-full-width-responsive="true"></ins>
-    <script>
-         (adsbygoogle = window.adsbygoogle || []).push({});
-    </script>
+<div class="header-container">
+  <div class="title">FROSTS INC</div>
+  <div class="header-buttons">
+    <button class="btn discord-btn" onclick="window.open('https://discord.gg/mCUHppWjv7')">
+      <i class="fab fa-discord"></i> Join Discord
+    </button>
+    <button class="btn settings-btn" id="settings-btn">
+      <i class="fas fa-cog"></i> Settings
+    </button>
+    <button class="btn tos-btn" id="tos-btn">
+      <i class="fas fa-file-contract"></i> Terms of Service
+    </button>
   </div>
 </div>
 
+<div class="games-header">
+  <div class="search-container">
+    <i class="fas fa-search"></i>
+    <input type="text" id="gameSearch" placeholder="Search games...">
+  </div>
+  <div id="totalGames"></div>
+</div>
+
+<div class="games-container" id="games-container">
+  <!-- Games will be dynamically inserted here -->
+</div>
+
+<footer>
+  <p>Frosts Inc Game Portal &copy; <span id="currentYear"></span> | For entertainment purposes only</p>
+  <p><i class="fas fa-exclamation-triangle"></i> Remember: Games should not interfere with educational activities</p>
+</footer>
+
 <div id="game-menu">
+  <!-- GAME MENU ADS -->
+  <div class="game-menu-ads">
+    <!-- Top Ad in Game Menu -->
+    <div class="bottom-ad" style="margin-bottom: 20px;">
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-3294172390463223"
+           data-ad-slot="3879302076"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+      <script>
+           (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+    </div>
+  </div>
+  
   <iframe id="game-frame" title="Game Frame"></iframe>
+  
   <div class="menu-buttons">
     <button class="menu-btn" id="fav-btn"><i class="fas fa-star"></i> Favorite</button>
     <button class="menu-btn" id="fullscreen-btn"><i class="fas fa-expand"></i> Fullscreen</button>
     <button class="menu-btn" id="newtab-btn"><i class="fas fa-external-link-alt"></i> New Tab</button>
     <button class="menu-btn" id="exit-btn"><i class="fas fa-times"></i> Exit</button>
+  </div>
+  
+  <!-- Bottom Ad in Game Menu -->
+  <div class="bottom-ad" style="margin-top: 20px;">
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-3294172390463223"
+         data-ad-slot="3879302076"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>
+         (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
   </div>
 </div>
 
@@ -1182,6 +1232,13 @@ window.addEventListener('load', function() {
       loadingScreen.style.display = 'none';
       document.getElementById('update-popup').style.display = 'flex';
       document.getElementById('currentYear').textContent = new Date().getFullYear();
+      
+      // Refresh ads after page loads
+      setTimeout(() => {
+        if (typeof adsbygoogle !== 'undefined') {
+          adsbygoogle.push({});
+        }
+      }, 1000);
     }, 800);
   }, 1500); // Reduced from 2000ms
 });
@@ -1367,6 +1424,13 @@ function openGameMenu(game) {
   iframe.src = game.link;
   iframe.dataset.title = game.title;
   document.body.style.overflow = 'hidden';
+  
+  // Refresh ads when game menu opens
+  setTimeout(() => {
+    if (typeof adsbygoogle !== 'undefined') {
+      adsbygoogle.push({});
+    }
+  }, 500);
 }
 
 // Game menu button handlers
@@ -1492,6 +1556,13 @@ window.onclick = function(event) {
 /* ===== UPDATE POPUP ===== */
 document.getElementById('closePopup').onclick = function() {
   document.getElementById('update-popup').style.display = 'none';
+  
+  // Refresh ads after closing update popup
+  setTimeout(() => {
+    if (typeof adsbygoogle !== 'undefined') {
+      adsbygoogle.push({});
+    }
+  }, 300);
 };
 
 /* ===== SETTINGS MANAGEMENT ===== */
@@ -1788,6 +1859,18 @@ document.addEventListener('keydown', function(e) {
 
 /* ===== INITIALIZE ===== */
 loadSettings();
+
+/* ===== AD REFRESH ON VISIBILITY CHANGE ===== */
+document.addEventListener('visibilitychange', function() {
+  if (!document.hidden) {
+    // Refresh ads when user returns to the tab
+    setTimeout(() => {
+      if (typeof adsbygoogle !== 'undefined') {
+        adsbygoogle.push({});
+      }
+    }, 500);
+  }
+});
 </script>
 </body>
 </html>
