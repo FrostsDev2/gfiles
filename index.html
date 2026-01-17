@@ -633,42 +633,6 @@ body {
   width: 100%;
 }
 
-/* ===== BOTTOM ADS ===== */
-.bottom-ad-container {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 100;
-  display: flex;
-  justify-content: center;
-  padding: 10px;
-  background: rgba(0,0,0,0.7);
-  backdrop-filter: blur(5px);
-  pointer-events: none;
-}
-
-.bottom-ad {
-  pointer-events: auto;
-  max-width: 728px;
-  width: 100%;
-  margin: 0 auto;
-}
-
-/* Hide ads on mobile to avoid crowding */
-@media (max-width: 768px) {
-  .sidebar-ads-container {
-    display: none;
-  }
-  
-  .bottom-ad-container {
-    position: relative;
-    margin-top: 20px;
-    background: transparent;
-    backdrop-filter: none;
-  }
-}
-
 /* ===== SETTINGS MENU ===== */
 #settings-menu {
   display:none;
